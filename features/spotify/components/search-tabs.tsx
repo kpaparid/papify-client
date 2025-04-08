@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 interface SearchTabsProps {
-  activeTab: "all" | "tracks" | "albums" | "playlists";
+  activeTab: "all" | "tracks" | "albums" | "playlists" | "artists";
   query: string;
 }
 

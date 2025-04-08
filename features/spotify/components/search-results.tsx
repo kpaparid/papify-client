@@ -18,7 +18,6 @@ export default async function SearchResults({ query }: SearchResultsProps) {
   return (
     <div className="mt-6">
       <SearchTabs activeTab="all" query={query} />
-
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-16">
         <div>
           <h2 className="text-2xl font-bold mb-4">Top result</h2>
@@ -26,16 +25,16 @@ export default async function SearchResults({ query }: SearchResultsProps) {
         </div>
 
         <div>
-          <h2 className="text-2xl font-bold mb-4">Tracks</h2>
-          <TrackList tracks={tracks} limit={3} />
-          <div className="mt-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-bold mb-4">Tracks</h2>
             <Link
-              href={`/search/tracks?q=${encodeURIComponent(query)}`}
+              href={`/spotify/search/tracks?q=${encodeURIComponent(query)}`}
               className="text-sm text-muted-foreground font-semibold hover:text-white transition"
             >
               Show all
             </Link>
           </div>
+          <TrackList tracks={tracks} limit={4} />
         </div>
       </div>
 
@@ -43,7 +42,7 @@ export default async function SearchResults({ query }: SearchResultsProps) {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">Artists</h2>
           <Link
-            href={`/search/artists?q=${encodeURIComponent(query)}`}
+            href={`/spotify/search/artists?q=${encodeURIComponent(query)}`}
             className="text-sm text-muted-foreground font-semibold hover:text-white transition"
           >
             Show all
@@ -55,7 +54,7 @@ export default async function SearchResults({ query }: SearchResultsProps) {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">Albums</h2>
           <Link
-            href={`/search/albums?q=${encodeURIComponent(query)}`}
+            href={`/spotify/search/albums?q=${encodeURIComponent(query)}`}
             className="text-sm text-muted-foreground font-semibold hover:text-white transition"
           >
             Show all
@@ -68,7 +67,7 @@ export default async function SearchResults({ query }: SearchResultsProps) {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">Playlists</h2>
           <Link
-            href={`/search/playlists?q=${encodeURIComponent(query)}`}
+            href={`/spotify/search/playlists?q=${encodeURIComponent(query)}`}
             className="text-sm text-muted-foreground font-semibold hover:text-white transition"
           >
             Show all

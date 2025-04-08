@@ -1,23 +1,10 @@
-import Link from "next/link";
-import { Music2, Search } from "lucide-react";
-import SearchForm from "./components/search-form";
-import SearchResults from "./components/search-results";
-import Header from "@/components/header";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { FaSpotify } from "react-icons/fa";
-export default function Spotify({ query }: { query: string }) {
+import SearchResults from "../components/search-results";
+export default function SpotifySearch({ query }: { query: string }) {
   const hasQuery = query.length > 0;
 
   return (
-    <div className="w-full mx-auto max-w-7xl space-y-6">
-      <Header
-        title="Spotify Search"
-        subtitle="Search for tracks, artists, albums, or playlists"
-      />
-      <SearchForm initialQuery={query} />
-
+    <>
       {hasQuery ? (
         <SearchResults query={query} />
       ) : (
@@ -42,6 +29,6 @@ export default function Spotify({ query }: { query: string }) {
           )}
         </div>
       )}
-    </div>
+    </>
   );
 }

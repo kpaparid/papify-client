@@ -1,4 +1,4 @@
-import Albums from "@/features/spotify/search/albums";
+import Artists from "@/features/spotify/search/artists";
 
 export default async function Page({
   searchParams,
@@ -6,5 +6,5 @@ export default async function Page({
   searchParams: { q: string };
 }) {
   const query = (await searchParams?.q) || "";
-  return <Albums query={query} />;
+  return <Artists query={query} />;
 }

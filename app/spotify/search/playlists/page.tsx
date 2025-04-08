@@ -1,10 +1,10 @@
-import Playlists from "@/features/spotify/playlists";
+import Playlists from "@/features/spotify/search/playlists";
 
-export default function Page({
+export default async function Page({
   searchParams,
 }: {
   searchParams: { q: string };
 }) {
-  const query = searchParams.q || "";
+  const query = (await searchParams?.q) || "";
   return <Playlists query={query} />;
 }

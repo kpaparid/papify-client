@@ -1,4 +1,4 @@
-import Tracks from "@/features/spotify/tracks";
+import Tracks from "@/features/spotify/search/tracks";
 
 export default function Page({
   searchParams,

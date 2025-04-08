@@ -1,4 +1,4 @@
-import Spotify from "@/features/spotify";
+import SpotifySearch from "@/features/spotify/search";
 
 export default function Page({
   searchParams,
@@ -6,5 +6,5 @@ export default function Page({
   searchParams: { q: string };
 }) {
   const query = searchParams.q || "";
-  return <Spotify query={query} />;
+  return <SpotifySearch query={query} />;
 }

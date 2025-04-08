@@ -1,17 +1,19 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { Search } from "lucide-react";
 
-interface SearchFormProps {
-  initialQuery?: string;
-}
-
-export default function SearchForm({ initialQuery = "" }: SearchFormProps) {
+export default function SearchForm() {
   const router = useRouter();
-  const [query, setQuery] = useState(initialQuery);
-
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get("q");
+  const [query, setQuery] = useState(initialQuery || "");
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
@@ -27,7 +29,7 @@ export default function SearchForm({ initialQuery = "" }: SearchFormProps) {
         </div>
         <input
           type="search"
-          className="block w-full p-3 pl-10 text-sm bg-accent border-none rounded-full focus:ring-2 focus:ring-muted-foreground/50 focus:outline-none text-white placeholder-accent/50"
+          className="block w-full p-3 pl-10 text-sm bg-card hover:bg-accent border-none rounded-full focus:ring-2 focus:ring-muted-foreground/50 focus:outline-none text-foreground placeholder-accent/50"
           placeholder="What do you want to listen to?"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
