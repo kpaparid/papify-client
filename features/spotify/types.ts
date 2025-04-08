@@ -96,3 +96,26 @@ export interface SearchResultType {
   tracks: SearchTrackType[]
   topResult: SearchTopResultType
 }
+
+export interface AlbumType {
+  id: string
+  total_tracks: number
+  images: string[]
+  name: string
+  release_date: string
+  isSaved: boolean
+  artists: {
+    id: string
+    name: string
+  }[]
+  tracks: AlbumTracksType[]
+}
+export interface AlbumTracksType {
+  id: string
+  name: string
+  duration_ms: number
+  artists: {
+    id: string
+    name: string
+  }[]
+}

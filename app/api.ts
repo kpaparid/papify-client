@@ -1,8 +1,12 @@
-import { GoogleDriveTrack, SearchResultType } from "@/features/spotify/types"
+import {
+  AlbumType,
+  GoogleDriveTrack,
+  SearchResultType,
+} from "@/features/spotify/types"
 import { TrackData } from "@/features/track-list/components/track-item"
 
 // const API_URL = process.env.API_URL+'/api'
-const API_URL = 'https://papify-backend.onrender.com/api'
+const API_URL = "https://papify-backend.onrender.com/api"
 // const API_URL = "http://localhost:5000/api"
 export const fetchGoogleDriveTracks = (): Promise<{
   data: GoogleDriveTrack[]
@@ -27,3 +31,5 @@ export const removeGoogleDriveTrack = (id: string): Promise<GoogleDriveTrack> =>
   fetch(API_URL + "/google-drive/tracks/" + id, { method: "DELETE" }).then(
     (res) => res.json()
   )
+export const fetchSpotifyAlbum = (id: string): Promise<AlbumType> =>
+  fetch(API_URL + "/spotify/album/" + id).then((res) => res.json())
