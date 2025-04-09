@@ -60,7 +60,7 @@ export function TrackList({
           </div>
           <div className="flex items-center justify-end text-sm text-muted-foreground font-semibold ms-auto">
             {/* {track.popularity} */}
-            <div className="w-full min-w-32 max-w-xs mb-4">
+            <div className="w-full min-w-32 max-w-xs">
               <div className="flex flex-row justify-between text-xs text-muted-foreground font-semibold mb-1">
                 <span>Popularity</span>
                 <span>{track.popularity}%</span>

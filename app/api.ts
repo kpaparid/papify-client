@@ -1,6 +1,8 @@
 import {
   AlbumType,
+  ArtistProfileType,
   GoogleDriveTrack,
+  PlaylistType,
   SearchResultType,
 } from "@/features/spotify/types"
 import { TrackData } from "@/features/track-list/components/track-item"
@@ -33,3 +35,7 @@ export const removeGoogleDriveTrack = (id: string): Promise<GoogleDriveTrack> =>
   )
 export const fetchSpotifyAlbum = (id: string): Promise<AlbumType> =>
   fetch(API_URL + "/spotify/album/" + id).then((res) => res.json())
+export const fetchSpotifyArtist = (id: string): Promise<ArtistProfileType> =>
+  fetch(API_URL + "/spotify/artist/" + id).then((res) => res.json())
+export const fetchSpotifyPlaylist = (id: string): Promise<PlaylistType> =>
+  fetch(API_URL + "/spotify/playlist/" + id).then((res) => res.json())
