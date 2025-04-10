@@ -40,9 +40,17 @@ export default async function Page({ params }: { params: { id: string } }) {
             </h1>
             <div className="flex items-center gap-2 mt-4">
               <div className="text-sm">
-                <Link href="#" className="font-semibold hover:underline">
-                  {album.artists.map((artist) => artist.name).join(", ")}
-                </Link>
+                {album.artists.map((artist, index) => (
+                  <>
+                    <Link
+                      href={`/spotify/artists/${artist.id}`}
+                      className="font-semibold hover:underline"
+                    >
+                      {artist.name}
+                    </Link>
+                    {index === album.artists.length - 1 ? "" : ", "}
+                  </>
+                ))}
                 <div className="text-muted-foreground font-semibold">
                   {new Date(album.release_date).getFullYear()} •{" "}
                   {album.tracks.length} songs •{" "}
