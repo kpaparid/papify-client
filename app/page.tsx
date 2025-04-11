@@ -16,7 +16,7 @@ export default async function Home() {
   ).length;
 
   return (
-    <div className="w-full mx-auto max-w-7xl space-y-6">
+    <div className="w-full mx-auto max-w-[1320px] space-y-6">
       <Header title="Music Library" subtitle={`Last updated: ${date}`} />
       <Metrics
         metrics={[

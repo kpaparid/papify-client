@@ -48,6 +48,7 @@ export interface SearchTopResultType {
   score: number
   genres: string[]
   followers: number
+  isSaved: boolean
   popularity: number
   duration_ms?: number
   artists: {
@@ -71,6 +72,7 @@ export interface SearchTrackType {
   id: string
   name: string
   popularity: number
+  isSaved: boolean
   artists: {
     id: string
     name: string
@@ -114,6 +116,7 @@ export interface AlbumTracksType {
   id: string
   name: string
   duration_ms: number
+  isSaved: boolean
   artists: {
     id: string
     name: string
@@ -140,6 +143,7 @@ export interface ArtistProfileTopTracksType {
     name: string;
     duration_ms: number;
     popularity: number;
+  isSaved: boolean;
     album: {
         id: string;
         name: string;
@@ -160,6 +164,7 @@ export interface ArtistProfileTracksType {
     id: string;
     name: string;
     duration_ms: number;
+    isSaved: boolean;
     popularity: number;
     album: {
         id: string;
@@ -186,6 +191,7 @@ export interface ArtistProfileAlbumsType {
     popularity: number;
     label: string;
     tracks: {
+        isSaved: boolean
         id: string;
         name: string;
         duration_ms: number;
@@ -225,6 +231,7 @@ export interface PlaylistTracksType {
     name: string;
     duration_ms: number;
     popularity: number;
+    isSaved: boolean;
     artists: {
         id: string;
         name: string;

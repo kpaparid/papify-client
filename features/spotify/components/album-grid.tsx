@@ -17,10 +17,10 @@ export function AlbumGrid({
         href: `/spotify/albums/${album.id}`,
         image: album.images?.[0],
         name: album.name,
-        descriptions: [
-          album.artists.map((artist) => artist.name).join(", "),
-          album.release_date,
-        ],
+        links: album.artists.map((artist) => ({
+          href: `/spotify/artists/${artist.id}`,
+          label: artist.name,
+        })),
       }))}
     />
   );

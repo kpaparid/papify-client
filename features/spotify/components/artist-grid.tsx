@@ -12,7 +12,6 @@ export function ArtistGrid({
   limit?: number;
 }) {
   const displayArtists = limit ? artists.slice(0, limit) : artists;
-  console.log(displayArtists[0].genres);
   return (
     <GridList
       items={displayArtists.map((artist) => ({

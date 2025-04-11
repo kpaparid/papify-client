@@ -2,6 +2,8 @@ import Image from "next/image";
 import { Play } from "lucide-react";
 import { SearchTrackType } from "../types";
 import Link from "next/link";
+import { Fragment } from "react";
+import SaveTrackButton from "@/components/save-track-button";
 
 interface TrackListProps {
   query: string;
@@ -21,7 +23,7 @@ export function TrackList({
     <div className="space-y-1">
       {displayTracks.map((track, index) => (
         <div
-          key={track.id}
+          key={`track-${index}`}
           className="grid grid-cols-[16px_4fr_3fr] gap-4 p-2 px-4 rounded-md hover:bg-card group"
         >
           <div className="flex items-center justify-center text-muted-foreground font-semibold group-hover:text-white">
@@ -44,16 +46,16 @@ export function TrackList({
               <div className="truncate font-medium">{track.name}</div>
               <div className="text-sm text-muted-foreground font-semibold truncate">
                 {track.artists.map((artist, index) => (
-                  <>
+                  <Fragment key={artist.id}>
                     <Link
+                      key={`artist-${index}`}
                       className="hover:underline hover:text-foreground"
-                      key={artist.id}
                       href={`/spotify/artists/${artist.id}`}
                     >
                       {artist.name}
                     </Link>
                     {track.artists.length - 1 !== index && ", "}
-                  </>
+                  </Fragment>
                 ))}
               </div>
             </div>
@@ -71,6 +73,13 @@ export function TrackList({
                   style={{ width: `${track.popularity}%` }}
                 />
               </div>
+            </div>
+            <div>
+              <SaveTrackButton
+                className="ms-8"
+                isSaved={track.isSaved}
+                spotifyId={track.id}
+              />
             </div>
           </div>
         </div>

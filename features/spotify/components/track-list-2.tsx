@@ -2,6 +2,8 @@ import Image from "next/image";
 import { Heart, Play } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Fragment } from "react";
+import SaveTrackButton from "@/components/save-track-button";
 function formatDuration(ms: number) {
   const minutes = Math.floor(ms / 60000);
   const seconds = Math.floor((ms % 60000) / 1000);
@@ -73,16 +75,15 @@ export function List({
                 <div className="text-sm text-muted-foreground font-semibold truncate">
                   {description && <span>{description}</span>}
                   {links?.map(({ label, href }, index) => (
-                    <>
+                    <Fragment key={`link-${index}`}>
                       <Link
                         className="hover:underline hover:text-foreground"
-                        key={label}
                         href={href}
                       >
                         {label}
                       </Link>
                       {links.length - 1 !== index && ", "}
-                    </>
+                    </Fragment>
                   ))}
                 </div>
               </div>
@@ -99,7 +100,7 @@ export function List({
               </span>
             )}
             {(duration || hasSave || popularity) && (
-              <div className="flex items-center justify-end text-sm text-muted-foreground font-semibold ms-auto">
+              <div className="flex items-center justify-end text-sm text-muted-foreground font-semibold ms-auto gap-10">
                 {popularity && (
                   <div className="w-full min-w-32 max-w-xs">
                     <div className="flex flex-row justify-between text-xs text-muted-foreground font-semibold mb-1">
@@ -118,11 +119,7 @@ export function List({
                   <span className="mr-4">{formatDuration(duration)}</span>
                 )}
                 {hasSave && (
-                  <button className="htext-foreground [&:hover>svg]:fill-foreground cursor-pointer">
-                    <Heart
-                      className={cn("h-4 w-4", isSaved && "fill-foreground")}
-                    />
-                  </button>
+                  <SaveTrackButton spotifyId={id} isSaved={!!isSaved} />
                 )}
               </div>
             )}

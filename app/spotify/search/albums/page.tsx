@@ -5,6 +5,6 @@ export default async function Page({
 }: {
   searchParams: { q: string };
 }) {
-  const query = (await searchParams?.q) || "";
+  const query = (await searchParams)?.q || "";
   return <Albums query={query} />;
 }

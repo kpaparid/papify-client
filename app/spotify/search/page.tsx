@@ -1,10 +1,10 @@
 import SpotifySearch from "@/features/spotify/search";
 
-export default function Page({
+export default async function Page({
   searchParams,
 }: {
   searchParams: { q: string };
 }) {
-  const query = searchParams.q || "";
+  const query = (await searchParams).q || "";
   return <SpotifySearch query={query} />;
 }

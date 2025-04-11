@@ -1,5 +1,6 @@
 "use server";
 
+import { toggleSaveSpotifyTrack } from "@/app/api";
 import { revalidatePath } from "next/cache";
 
 export interface YouTubeVideo {
@@ -64,6 +65,19 @@ export async function updateTrackYoutubeVideo(
     }
 
     // Revalidate the tracks page to show updated data
+    revalidatePath("/tracks");
+  } catch (error) {
+    console.error("Error updating track:", error);
+    throw error;
+  }
+}
+
+export async function toggleSpotifyTrackAction(
+  spotifyId: string,
+  save: boolean
+) {
+  try {
+    await toggleSaveSpotifyTrack(spotifyId, save);
     revalidatePath("/tracks");
   } catch (error) {
     console.error("Error updating track:", error);

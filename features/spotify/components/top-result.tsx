@@ -5,6 +5,9 @@ import { SearchTopResultType } from "../types";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import UserPlaceholder from "@/components/user-placeholder";
+import { Fragment } from "react";
+import SaveTrackButton from "@/components/save-track-button";
 // Helper function to format duration from milliseconds
 function formatDuration(ms: number): string {
   const minutes = Math.floor(ms / 60000);
@@ -27,6 +30,7 @@ export function TopResult({ topResult }: { topResult: SearchTopResultType }) {
     <div className="bg-card transition rounded-lg overflow-hidden">
       {topResult.type === "artist" ? (
         <TopResultComponent
+          key="artist"
           popularity={topResult.popularity}
           title={topResult.name}
           image={topResult.images?.[0] || topResult.album?.images?.[0]}
@@ -36,6 +40,7 @@ export function TopResult({ topResult }: { topResult: SearchTopResultType }) {
         />
       ) : topResult.type === "track" ? (
         <TopResultComponent
+          key="track"
           popularity={topResult.popularity}
           title={topResult.name}
           image={topResult.images?.[0] || topResult.album?.images?.[0]}
@@ -81,14 +86,20 @@ function TopResultComponent({
 }) {
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="relative md:w-60 aspect-square group">
-        <Image
-          src={image || "/placeholder.svg"}
-          alt={title}
-          fill
-          className="object-cover"
-        />
-      </div>
+      {image ? (
+        <div className="relative md:w-60 aspect-square group">
+          <Image
+            src={image || "/placeholder.svg"}
+            alt={title}
+            fill
+            className="object-cover"
+          />
+        </div>
+      ) : (
+        <div className="flex items-center p-6 2xl:block hidden">
+          <UserPlaceholder className="xl:size-30 2xl:size-40" />
+        </div>
+      )}
 
       <div className="p-6 flex-1">
         <div className="flex items-start justify-between">
@@ -99,16 +110,15 @@ function TopResultComponent({
             <h3 className="text-3xl font-bold mb-1">{title}</h3>
             <div className="text-muted-foreground font-semibold mb-4">
               {links?.map(({ href, label }, index) => (
-                <>
+                <Fragment key={`link-${index}`}>
                   <Link
                     className="hover:underline hover:text-foreground"
-                    key={`link-${index}`}
                     href={href}
                   >
                     {label}
                   </Link>
                   {links.length - 1 !== index && ", "}
-                </>
+                </Fragment>
               ))}
               <div className="">
                 {description && <div>{description}</div>}
@@ -120,15 +130,7 @@ function TopResultComponent({
           </div>
 
           {hasSave && (
-            <Button
-              variant="ghost"
-              className="p-0! rounded-full text-foreground"
-            >
-              <Heart
-                className={cn("w-6! h-6!", isSaved && "fill-foreground")}
-              />
-            </Button>
-            // <div className="flex items-center gap-2 text-sm">{topRight}</div>
+            <SaveTrackButton className="size-6" isSaved={!!isSaved} />
           )}
         </div>
 
@@ -188,7 +190,7 @@ function AlbumTopResult({ result }: { result: SearchTopResultType }) {
         <div className="flex items-center text-muted-foreground font-semibold mb-4">
           <div className="flex items-center">
             {result.artists.map((artist, index) => (
-              <span key={artist.id}>
+              <span key={`artist-${index}`}>
                 <Link
                   href={`/artist/${artist.id}`}
                   className="hover:text-white hover:underline"

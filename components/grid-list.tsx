@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ReactNode } from "react";
+import { Fragment, ReactNode } from "react";
 
 export default function GridList({
   items,
@@ -11,11 +11,12 @@ export default function GridList({
     image?: string;
     name: string;
     descriptions?: ReactNode[];
+    links?: { href: string; label: string }[];
   }[];
 }) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-      {items.map(({ id, href, image, name, descriptions }) => (
+    <div className="flex w-full flex-wrap gap-6">
+      {items.map(({ id, href, image, name, descriptions, links }) => (
         <div key={id} className="group">
           <div className="relative aspect-square rounded-lg overflow-hidden shadow-lg group max-h-[200px] min-h-[200px]">
             <Link href={href}>
@@ -28,8 +29,22 @@ export default function GridList({
               />
             </Link>
           </div>
-          <div className="truncate text-center mt-1.5">
-            <div className="font-medium truncate">{name}</div>
+          <div className="truncate text-center mt-1.5 max-w-[200px] text-muted-foreground text-sm font-semibold">
+            <div className="font-medium truncate text-foreground text-base">
+              {name}
+            </div>
+            {links &&
+              links.map(({ href, label }, index) => (
+                <Fragment key={`link-${index}`}>
+                  <Link
+                    href={href}
+                    className="hover:underline hover:text-foreground"
+                  >
+                    {label}
+                  </Link>
+                  {index < links.length - 1 && " • "}
+                </Fragment>
+              ))}
             {descriptions && (
               <div className="text-sm text-muted-foreground font-semibold truncate">
                 {descriptions.join(" • ")}

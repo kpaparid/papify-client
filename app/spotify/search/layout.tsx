@@ -8,9 +8,8 @@ export default async function Layout({
   children: React.ReactNode;
   searchParams: { q: string };
 }) {
-  const query = (await searchParams?.q) || "";
   return (
-    <div className="w-full mx-auto max-w-7xl space-y-6">
+    <div className="w-full mx-auto max-w-[1320px] space-y-6">
       <Header
         title="Spotify Search"
         subtitle="Search for tracks, artists, albums, or playlists"

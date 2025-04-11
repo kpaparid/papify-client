@@ -3,6 +3,7 @@ import BackButton from "@/components/back-button";
 import { List } from "@/features/spotify/components/track-list-2";
 import Image from "next/image";
 import Link from "next/link";
+import { Fragment } from "react";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = await params;
@@ -14,8 +15,10 @@ export default async function Page({ params }: { params: { id: string } }) {
   const totalHours = Math.floor(totalDuration / 3600000);
   const totalMinutes = Math.floor((totalDuration % 3600000) / 60000);
 
+  console.log(album.tracks);
+
   return (
-    <div className="w-full mx-auto max-w-7xl space-y-6">
+    <div className="w-full mx-auto max-w-[1320px] space-y-6">
       <div className="container mx-auto px-4 py-8">
         <BackButton />
 
@@ -41,7 +44,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             <div className="flex items-center gap-2 mt-4">
               <div className="text-sm">
                 {album.artists.map((artist, index) => (
-                  <>
+                  <Fragment key={`artist-${index}`}>
                     <Link
                       href={`/spotify/artists/${artist.id}`}
                       className="font-semibold hover:underline"
@@ -49,7 +52,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                       {artist.name}
                     </Link>
                     {index === album.artists.length - 1 ? "" : ", "}
-                  </>
+                  </Fragment>
                 ))}
                 <div className="text-muted-foreground font-semibold">
                   {new Date(album.release_date).getFullYear()} •{" "}

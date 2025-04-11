@@ -13,7 +13,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const playlist = await fetchSpotifyPlaylist(id);
 
   return (
-    <div className="w-full mx-auto max-w-7xl space-y-6">
+    <div className="w-full mx-auto max-w-[1320px] space-y-6">
       <div className="container mx-auto px-4 py-8">
         <BackButton />
         <div className="flex flex-col md:flex-row gap-8 mb-8">
@@ -53,6 +53,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             name: track.name,
             hasSave: true,
             isSaved: track.isSaved,
+            image: track.album[0].images[0],
             duration: track.duration_ms,
             links: track.artists.map((artist) => ({
               label: artist.name,
