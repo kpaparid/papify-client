@@ -30,6 +30,8 @@ export function TopResult({ topResult }: { topResult: SearchTopResultType }) {
     <div className="bg-card transition rounded-lg overflow-hidden">
       {topResult.type === "artist" ? (
         <TopResultComponent
+          href={`/spotify/artists/${topResult.id}`}
+          spotifyId={topResult.id}
           key="artist"
           popularity={topResult.popularity}
           title={topResult.name}
@@ -40,6 +42,8 @@ export function TopResult({ topResult }: { topResult: SearchTopResultType }) {
         />
       ) : topResult.type === "track" ? (
         <TopResultComponent
+          href={`/spotify/tracks/${topResult.id}`}
+          spotifyId={topResult.id}
           key="track"
           popularity={topResult.popularity}
           title={topResult.name}
@@ -62,6 +66,8 @@ export function TopResult({ topResult }: { topResult: SearchTopResultType }) {
 }
 
 function TopResultComponent({
+  href,
+  spotifyId,
   type,
   title,
   links,
@@ -73,6 +79,8 @@ function TopResultComponent({
   hasSave,
   isSaved,
 }: {
+  href: string;
+  spotifyId: string;
   type: string;
   title: string;
   links?: { href: string; label: string }[];
@@ -85,7 +93,7 @@ function TopResultComponent({
   isSaved?: boolean;
 }) {
   return (
-    <div className="flex flex-col md:flex-row">
+    <Link href={href} className="flex flex-col md:flex-row">
       {image ? (
         <div className="relative md:w-60 aspect-square group">
           <Image
@@ -130,7 +138,11 @@ function TopResultComponent({
           </div>
 
           {hasSave && (
-            <SaveTrackButton className="size-6" isSaved={!!isSaved} />
+            <SaveTrackButton
+              spotifyId={spotifyId}
+              className="size-6"
+              isSaved={!!isSaved}
+            />
           )}
         </div>
 
@@ -158,7 +170,7 @@ function TopResultComponent({
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

@@ -3,7 +3,7 @@ import { PlaylistGrid } from "../components/playlist-grid";
 import { SearchTabs } from "../components/search-tabs";
 
 export default async function Playlists({ query }: { query: string }) {
-  const result = await fetchSpotifySearch(query);
+  const result = await fetchSpotifySearch(query, ["search"]);
   if (!result) return null;
   const { topResult, tracks, albums, playlists, artists } = result;
   return (

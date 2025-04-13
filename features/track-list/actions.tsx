@@ -1,7 +1,7 @@
 "use server";
 
 import { toggleSaveSpotifyTrack } from "@/app/api";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export interface YouTubeVideo {
   id: string;
@@ -31,7 +31,6 @@ export async function searchYoutube(query: string): Promise<YouTubeVideo[]> {
     }
 
     const data = await response.json();
-    console.log(data.items[0]);
     return data.items.map((item: any) => ({
       id: item.id.videoId,
       title: item.snippet.title,
@@ -77,8 +76,9 @@ export async function toggleSpotifyTrackAction(
   save: boolean
 ) {
   try {
+    console.log({ spotifyId, save });
     await toggleSaveSpotifyTrack(spotifyId, save);
-    revalidatePath("/tracks");
+    revalidateTag("search");
   } catch (error) {
     console.error("Error updating track:", error);
     throw error;

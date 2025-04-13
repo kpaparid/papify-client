@@ -11,7 +11,6 @@ export function PlaylistGrid({
   limit?: number;
 }) {
   const displayPlaylists = limit ? playlists.slice(0, limit) : playlists;
-  console.log(displayPlaylists);
   return (
     <GridList
       items={displayPlaylists.map((playlist) => ({

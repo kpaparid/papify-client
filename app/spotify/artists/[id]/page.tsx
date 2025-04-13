@@ -14,7 +14,6 @@ function formatFollowers(count: number): string {
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = await params;
   const { artist, playlists, tracks, albums } = await fetchSpotifyArtist(id);
-  console.log(artist);
 
   return (
     <div className="w-full mx-auto max-w-[1320px] space-y-6">

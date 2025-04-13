@@ -12,7 +12,7 @@ interface SearchResultsProps {
 }
 
 export default async function SearchResults({ query }: SearchResultsProps) {
-  const result = await fetchSpotifySearch(query);
+  const result = await fetchSpotifySearch(query, ["search"]);
   if (!result) return null;
   const { topResult, tracks, albums, playlists, artists } = result;
   return (

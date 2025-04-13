@@ -15,8 +15,6 @@ export default async function Page({ params }: { params: { id: string } }) {
   const totalHours = Math.floor(totalDuration / 3600000);
   const totalMinutes = Math.floor((totalDuration % 3600000) / 60000);
 
-  console.log(album.tracks);
-
   return (
     <div className="w-full mx-auto max-w-[1320px] space-y-6">
       <div className="container mx-auto px-4 py-8">

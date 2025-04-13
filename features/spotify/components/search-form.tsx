@@ -29,7 +29,7 @@ export default function SearchForm() {
         </div>
         <input
           type="search"
-          className="block w-full p-3 pl-10 text-sm bg-card hover:bg-accent border-none rounded-full focus:ring-2 focus:ring-muted-foreground/50 focus:outline-none text-foreground placeholder-accent/50"
+          className="block w-full p-3 pl-10 text-sm bg-card hover:bg-accent border-none rounded-full focus:ring-2 focus:ring-muted-foreground/50 focus:outline-none text-foreground placeholder-muted-foreground"
           placeholder="What do you want to listen to?"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
