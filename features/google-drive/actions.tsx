@@ -18,3 +18,6 @@ export async function removeGoogleDriveTrackAction(
 export async function refetchGoogleDriveTracks(): Promise<void> {
   revalidatePath("/google-drive")
 }
+export async function refetchYoutubeTracks(): Promise<void> {
+  revalidatePath("/youtube")
+}

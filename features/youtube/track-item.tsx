@@ -3,18 +3,19 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Check, Trash2 } from "lucide-react"
 import Image from "next/image"
-import { GoogleDriveTrack } from "../spotify/types"
-import { removeGoogleDriveTrackAction } from "./actions"
+import { YoutubeTrack } from "../spotify/types"
 
 export function TrackItem({
-  id,
-  appProperties: { name, artists, image },
+  query,
+  spotifyId,
+  youtubeId,
+  images,
   collectionIds,
-}: GoogleDriveTrack) {
+}: YoutubeTrack) {
   if (typeof collectionIds === "undefined") {
     console.log(name)
   }
-  const removeGoogleDriveTrack = removeGoogleDriveTrackAction.bind(null, id)
+  // const removeGoogleDriveTrack = removeGoogleDriveTrackAction.bind(null, id)
   return (
     <div className='group relative rounded-xl bg-card border-accent border p-3 transition-all hover:bg-card'>
       <div className='flex items-center gap-4'>
@@ -22,12 +23,8 @@ export function TrackItem({
           <div className='relative w-full md:w-16 h-16'>
             <div className='relative h-full w-full cursor-pointer group'>
               <Image
-                src={
-                  image ||
-                  "/placeholder.svg?height=300&width=300" ||
-                  "/placeholder.svg"
-                }
-                alt={name}
+                src={images[0]}
+                alt={query}
                 fill
                 className='object-cover rounded-md'
               />
@@ -38,14 +35,14 @@ export function TrackItem({
         <div className='flex-1 min-w-0'>
           <div className='flex justify-between items-center'>
             <div className='flex items-center gap-2.5'>
-              <h3 className='font-medium text-xl'>{name}</h3>
+              <h3 className='font-medium text-xl'>{query}</h3>
               {typeof collectionIds !== "undefined" && (
                 <Badge className='bg-[#183D3D] text-accent-foreground flex items-center gap-1'>
                   <Check className='h-3 w-3' /> In Collection
                 </Badge>
               )}
             </div>
-            <div className='flex items-center gap-1'>
+            {/* <div className='flex items-center gap-1'>
               <form action={removeGoogleDriveTrack}>
                 <Button
                   type='submit'
@@ -56,10 +53,10 @@ export function TrackItem({
                   <Trash2 className='h-4 w-4' />
                 </Button>
               </form>
-            </div>
+            </div> */}
           </div>
           <div className='flex flex-wrap items-center gap-x-1.5 gap-y-2 mt-0.5 font-semibold'>
-            <p className='text-sm text-muted-foreground'>{artists}</p>
+            <p className='text-sm text-muted-foreground'>{youtubeId}</p>
             <p className='text-sm text-muted-foreground'>-</p>
             <p className='text-sm text-muted-foreground'>{"2m 30s"}</p>
           </div>

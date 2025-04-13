@@ -124,127 +124,144 @@ export interface AlbumTracksType {
 }
 
 export interface ArtistProfileDetailsType {
-    id: string;
-    name: string;
-    images: string[];
-    genres: string[];
-    followers: number;
-    popularity: number;
+  id: string
+  name: string
+  images: string[]
+  genres: string[]
+  followers: number
+  popularity: number
 }
 export interface ArtistProfilePlaylistType {
-    id: string;
-    name: string;
-    images: string[];
-    total_tracks: number;
-    description: string;
+  id: string
+  name: string
+  images: string[]
+  total_tracks: number
+  description: string
 }
 export interface ArtistProfileTopTracksType {
-    id: string;
-    name: string;
-    duration_ms: number;
-    popularity: number;
-  isSaved: boolean;
-    album: {
-        id: string;
-        name: string;
-        images: string[];
-        release_date: string;
-        total_tracks: number;
-        artists: {
-            id: string;
-            name: string;
-        }[]
-    },
+  id: string
+  name: string
+  duration_ms: number
+  popularity: number
+  isSaved: boolean
+  album: {
+    id: string
+    name: string
+    images: string[]
+    release_date: string
+    total_tracks: number
     artists: {
-        id: string;
-        name: string;
+      id: string
+      name: string
     }[]
+  }
+  artists: {
+    id: string
+    name: string
+  }[]
 }
 export interface ArtistProfileTracksType {
-    id: string;
-    name: string;
-    duration_ms: number;
-    isSaved: boolean;
-    popularity: number;
-    album: {
-        id: string;
-        name: string;
-        images: string[];
-        release_date: string;
-        total_tracks: number;
-        artists: {
-            id: string;
-            name: string;
-        }[]
-    }[],
+  id: string
+  name: string
+  duration_ms: number
+  isSaved: boolean
+  popularity: number
+  album: {
+    id: string
+    name: string
+    images: string[]
+    release_date: string
+    total_tracks: number
     artists: {
-        id: string;
-        name: string;
+      id: string
+      name: string
     }[]
+  }[]
+  artists: {
+    id: string
+    name: string
+  }[]
 }
 export interface ArtistProfileAlbumsType {
-    id: string;
-    name: string;
-    images: string[];
-    release_date: string;
-    total_tracks: number;
-    popularity: number;
-    label: string;
-    tracks: {
-        isSaved: boolean
-        id: string;
-        name: string;
-        duration_ms: number;
-        artists: {
-            id: string;
-            name: string;
-        }[]
-    }[]
+  id: string
+  name: string
+  images: string[]
+  release_date: string
+  total_tracks: number
+  popularity: number
+  label: string
+  tracks: {
+    isSaved: boolean
+    id: string
+    name: string
+    duration_ms: number
     artists: {
-        id: string;
-        name: string;
+      id: string
+      name: string
     }[]
+  }[]
+  artists: {
+    id: string
+    name: string
+  }[]
 }
 export interface ArtistProfileType {
-    id: string;
-    artist: ArtistProfileDetailsType;
-    playlists: ArtistProfilePlaylistType[];
-    topTracks: ArtistProfileTopTracksType[];
-    tracks: ArtistProfileTracksType[];
-    albums: ArtistProfileAlbumsType[];
+  id: string
+  artist: ArtistProfileDetailsType
+  playlists: ArtistProfilePlaylistType[]
+  topTracks: ArtistProfileTopTracksType[]
+  tracks: ArtistProfileTracksType[]
+  albums: ArtistProfileAlbumsType[]
 }
 
 export interface PlaylistType {
-    id: string;
-    name: string;
-    images: string[];
-    owner: {
-        name: string;
-        id: string;
-        type: string;
-    }
-    total_tracks: number;
-    tracks: PlaylistTracksType[];
+  id: string
+  name: string
+  images: string[]
+  owner: {
+    name: string
+    id: string
+    type: string
+  }
+  total_tracks: number
+  tracks: PlaylistTracksType[]
 }
 export interface PlaylistTracksType {
-    id: string;
-    name: string;
-    duration_ms: number;
-    popularity: number;
-    isSaved: boolean;
+  id: string
+  name: string
+  duration_ms: number
+  popularity: number
+  isSaved: boolean
+  artists: {
+    id: string
+    name: string
+  }[]
+  album: {
+    id: string
+    name: string
+    images: string[]
+    release_date: string
+    total_tracks: number
     artists: {
-        id: string;
-        name: string;
-    }[];
-    album: {
-        id: string;
-        name: string;
-        images: string[];
-        release_date: string;
-        total_tracks: number;
-        artists: {
-            id: string;
-            name: string;
-        }[];
+      id: string
+      name: string
     }[]
+  }[]
+}
+export interface YoutubeTrack {
+  _id: {
+    $oid: string
+  }
+  query: string
+  spotifyId: string
+  youtubeId: string
+  title: string
+  publish_date: {
+    $date: string
+  }
+  images: string[]
+  description: string
+  __v: number
+  collectionIds?: string[]
+  isSaved: boolean
 }
