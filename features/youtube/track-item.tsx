@@ -1,9 +1,9 @@
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import { Check, Trash2 } from "lucide-react"
-import Image from "next/image"
-import { YoutubeTrack } from "../spotify/types"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Check, Trash2 } from "lucide-react";
+import Image from "next/image";
+import { YoutubeTrack } from "../spotify/types";
 
 export function TrackItem({
   query,
@@ -12,33 +12,30 @@ export function TrackItem({
   images,
   collectionIds,
 }: YoutubeTrack) {
-  if (typeof collectionIds === "undefined") {
-    console.log(name)
-  }
   // const removeGoogleDriveTrack = removeGoogleDriveTrackAction.bind(null, id)
   return (
-    <div className='group relative rounded-xl bg-card border-accent border p-3 transition-all hover:bg-card'>
-      <div className='flex items-center gap-4'>
-        <div className='flex flex-col items-center md:flex-row'>
-          <div className='relative w-full md:w-16 h-16'>
-            <div className='relative h-full w-full cursor-pointer group'>
+    <div className="group relative rounded-xl bg-card border-accent border p-3 transition-all hover:bg-card">
+      <div className="flex items-center gap-4">
+        <div className="flex flex-col items-center md:flex-row">
+          <div className="relative w-full md:w-16 h-16">
+            <div className="relative h-full w-full cursor-pointer group">
               <Image
                 src={images[0]}
                 alt={query}
                 fill
-                className='object-cover rounded-md'
+                className="object-cover rounded-md"
               />
             </div>
           </div>
         </div>
 
-        <div className='flex-1 min-w-0'>
-          <div className='flex justify-between items-center'>
-            <div className='flex items-center gap-2.5'>
-              <h3 className='font-medium text-xl'>{query}</h3>
+        <div className="flex-1 min-w-0">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2.5">
+              <h3 className="font-medium text-xl">{query.split(" - ")[0]}</h3>
               {typeof collectionIds !== "undefined" && (
-                <Badge className='bg-[#183D3D] text-accent-foreground flex items-center gap-1'>
-                  <Check className='h-3 w-3' /> In Collection
+                <Badge className="bg-[#183D3D] text-accent-foreground flex items-center gap-1">
+                  <Check className="h-3 w-3" /> In Collection
                 </Badge>
               )}
             </div>
@@ -55,14 +52,16 @@ export function TrackItem({
               </form>
             </div> */}
           </div>
-          <div className='flex flex-wrap items-center gap-x-1.5 gap-y-2 mt-0.5 font-semibold'>
-            <p className='text-sm text-muted-foreground'>{youtubeId}</p>
-            <p className='text-sm text-muted-foreground'>-</p>
-            <p className='text-sm text-muted-foreground'>{"2m 30s"}</p>
+          <div className="flex flex-wrap items-center gap-x-1.5 gap-y-2 mt-0.5 font-semibold">
+            <p className="text-sm text-muted-foreground">
+              {query.split(" - ")[1]}
+            </p>
+            <p className="text-sm text-muted-foreground">-</p>
+            <p className="text-sm text-muted-foreground">{youtubeId}</p>
           </div>
-          <div className='mt-2'>
+          <div className="mt-2">
             {collectionIds && collectionIds.length > 0 && (
-              <div className='flex flex-wrap gap-2 mt-1 md:mt-0'>
+              <div className="flex flex-wrap gap-2 mt-1 md:mt-0">
                 {collectionIds.map((collection) => (
                   <Badge
                     key={collection}
@@ -80,5 +79,5 @@ export function TrackItem({
         </div>
       </div>
     </div>
-  )
+  );
 }

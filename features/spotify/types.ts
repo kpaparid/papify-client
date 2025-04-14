@@ -249,9 +249,7 @@ export interface PlaylistTracksType {
   }[]
 }
 export interface YoutubeTrack {
-  _id: {
-    $oid: string
-  }
+  _id: string;
   query: string
   spotifyId: string
   youtubeId: string
