@@ -1,64 +1,68 @@
-import { fetchGoogleDriveTracks } from "@/app/api"
-import Header from "@/components/header"
-import Metrics from "@/components/metrics"
-import { Button } from "@/components/ui/button"
-import { RefreshCw } from "lucide-react"
-import { refetchGoogleDriveTracks } from "./actions"
-import { TrackItem } from "./track-item"
-import { format, isToday } from "date-fns"
+import { fetchGoogleDriveTracks } from "@/features/api";
+import Header from "@/components/header";
+import Metrics from "@/components/metrics";
+import { Check } from "lucide-react";
+import { refetchGoogleDriveTracks, removeGoogleDriveTrackAction } from "./actions";
+import List from "./list";
 
 export default async function GoogleDrive() {
-  const { data: tracks, date } = await fetchGoogleDriveTracks()
+  const { data: tracks, date } = await fetchGoogleDriveTracks();
+  const items = tracks.map((track) => {
+    return {
+      id: track.id,
+      image: track.appProperties.image,
+      title: track.appProperties.name,
+      description: `${track.appProperties.artists} - ${track.appProperties.album} - ${track.appProperties.youtubeId} - ${track.appProperties.spotifyId}`,
+      badgeText: typeof track.collectionIds !== "undefined" ? "In Collection" : undefined,
+      badgeIcon: <Check />,
+      labels: track?.collectionIds?.map((id) => ({ text: id })),
+      deleteAction: removeGoogleDriveTrackAction,
+      meta: {
+        isSaved: track.isSaved,
+        date: new Date(track.createdTime).getTime(),
+        youtubeId: track.appProperties.youtubeId,
+        spotifyId: track.appProperties.spotifyId,
+        name: track.appProperties.name,
+        artists: track.appProperties.artists,
+        album: track.appProperties.album,
+        collectionIds: track.collectionIds,
+      },
+    };
+  });
   return (
-    <div className='w-full mx-auto max-w-[1320px] space-y-6'>
-      <Header title='Google Drive' subtitle='Manage your cloud tracks' />
+    <div className="w-full mx-auto max-w-[1320px] space-y-6">
+      <Header title="Google Drive" subtitle="Manage your cloud tracks" />
       <Metrics
         metrics={[
           { label: "Total Tracks", value: tracks.length },
           {
             label: "In Collections",
-            value: tracks.filter(
-              ({ collectionIds }) => typeof collectionIds !== "undefined"
-            ).length,
-            badge: `${
-              (tracks.filter(
-                ({ collectionIds }) => typeof collectionIds !== "undefined"
-              ).length *
-                100) /
-              tracks.length
-            }%`,
+            value: tracks.filter(({ collectionIds }) => typeof collectionIds !== "undefined").length,
+            badge: `${(tracks.filter(({ collectionIds }) => typeof collectionIds !== "undefined").length * 100) / tracks.length}%`,
           },
           {
             label: "Not in Collections",
-            value: tracks.filter(
-              ({ collectionIds }) => typeof collectionIds === "undefined"
-            ).length,
+            value: tracks.filter(({ collectionIds }) => typeof collectionIds === "undefined").length,
           },
         ]}
       />
-
-      <div className='mb-6 flex items-center justify-between'>
-        <h2 className='text-xl font-bold'>Your Drive Tracks</h2>
-        <div className='flex items-center gap-2'>
-          <span className='text-sm text-muted-foreground'>
-            Last synced:{" "}
-            {`${isToday(new Date()) ? "Today" : format(new Date(), "PPP")} at
-            ${format(new Date(), "h:mm a")}`}
-          </span>
-          <form action={refetchGoogleDriveTracks}>
-            <Button type='submit' variant='outline' size='sm' className='gap-2'>
-              <RefreshCw className='h-3.5 w-3.5' />
-              Refresh
-            </Button>
-          </form>
-        </div>
-      </div>
-
-      <div className='space-y-3 mb-6'>
-        {tracks.map((track) => (
-          <TrackItem key={track.id} {...track} />
-        ))}
-      </div>
+      <List
+        title="Your Drive Tracks"
+        items={items}
+        sort={[
+          { field: "name", label: "Name" },
+          { field: "artists", label: "Artists" },
+          { field: "album", label: "Album" },
+          { field: "date", label: "Date", type: "date" },
+          { field: "isSaved", label: "Saved" },
+        ]}
+        filters={[
+          { field: "isSaved", label: "Saved" },
+          { field: "isNotSaved", label: "Not Saved" },
+        ]}
+        date={new Date(date).toISOString()}
+        refetch={refetchGoogleDriveTracks}
+      />
     </div>
-  )
+  );
 }

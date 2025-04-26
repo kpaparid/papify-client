@@ -1,6 +1,6 @@
 "use server";
 
-import { toggleSaveSpotifyTrack } from "@/app/api";
+import { toggleSaveSpotifyTrack } from "@/features/api";
 import { revalidatePath, revalidateTag } from "next/cache";
 
 export interface YouTubeVideo {
@@ -21,9 +21,7 @@ export async function searchYoutube(query: string): Promise<YouTubeVideo[]> {
 
   try {
     const response = await fetch(
-      `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(
-        query
-      )}&type=video&key=${apiKey}`
+      `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(query)}&type=video&key=${apiKey}`
     );
 
     if (!response.ok) {
@@ -44,10 +42,7 @@ export async function searchYoutube(query: string): Promise<YouTubeVideo[]> {
   }
 }
 
-export async function updateTrackYoutubeVideo(
-  trackId: string,
-  youtubeId: string
-): Promise<void> {
+export async function updateTrackYoutubeVideo(trackId: string, youtubeId: string): Promise<void> {
   // This is where you would update your database with the new YouTube ID
   try {
     // Example API call to your backend
@@ -71,10 +66,7 @@ export async function updateTrackYoutubeVideo(
   }
 }
 
-export async function toggleSpotifyTrackAction(
-  spotifyId: string,
-  save: boolean
-) {
+export async function toggleSpotifyTrackAction(spotifyId: string, save: boolean) {
   try {
     console.log({ spotifyId, save });
     await toggleSaveSpotifyTrack(spotifyId, save);
@@ -83,4 +75,12 @@ export async function toggleSpotifyTrackAction(
     console.error("Error updating track:", error);
     throw error;
   }
+}
+
+export async function refetchSavedTracks() {
+  revalidatePath("/");
+}
+
+export async function deleteSpotifyTrackAction(spotifyId: string) {
+  return toggleSpotifyTrackAction(spotifyId, false);
 }

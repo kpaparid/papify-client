@@ -5,15 +5,11 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Loader2, CircleCheck, Play, Pause } from "lucide-react";
-import {
-  searchYoutube,
-  updateTrackYoutubeVideo,
-  type YouTubeVideo,
-} from "../actions";
+import { searchYoutube, updateTrackYoutubeVideo, type YouTubeVideo } from "../actions";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import YouTube from "react-youtube";
-import { refetchTracks } from "@/app/api";
+import { refetchTracks } from "@/features/api";
 
 interface YoutubeSearchProps {
   trackId: string;
@@ -22,20 +18,13 @@ interface YoutubeSearchProps {
   currentYoutubeVideo: YouTubeVideo;
 }
 
-export function YoutubeSearch({
-  trackId,
-  initialQuery,
-  currentYoutubeVideo,
-  onSuccess,
-}: YoutubeSearchProps) {
+export function YoutubeSearch({ trackId, initialQuery, currentYoutubeVideo, onSuccess }: YoutubeSearchProps) {
   const router = useRouter();
   const [query, setQuery] = useState(initialQuery);
   const [searchResults, setSearchResults] = useState<YouTubeVideo[]>([]);
   const [searching, setSearching] = useState(false);
   const [updating, setUpdating] = useState(false);
-  const [selectedVideoId, setSelectedVideoId] = useState<string | null>(
-    currentYoutubeVideo?.id || null
-  );
+  const [selectedVideoId, setSelectedVideoId] = useState<string | null>(currentYoutubeVideo?.id || null);
   const [previewVideoId, setPreviewVideoId] = useState<string | null>(null);
 
   const handleSearch = async () => {
@@ -82,10 +71,7 @@ export function YoutubeSearch({
   }, []);
 
   // Combine current video with search results, but avoid duplicates
-  const allVideos = [
-    currentYoutubeVideo,
-    ...searchResults.filter((video) => video.id !== currentYoutubeVideo?.id),
-  ].filter(Boolean);
+  const allVideos = [currentYoutubeVideo, ...searchResults.filter((video) => video.id !== currentYoutubeVideo?.id)].filter(Boolean);
 
   return (
     <div className="space-y-4">
@@ -97,16 +83,8 @@ export function YoutubeSearch({
           className="flex-1 bg-input"
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
-        <Button
-          className="bg-input text-foreground"
-          onClick={handleSearch}
-          disabled={searching}
-        >
-          {searching ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Search className="h-4 w-4" />
-          )}
+        <Button className="bg-input text-foreground" onClick={handleSearch} disabled={searching}>
+          {searching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
         </Button>
       </div>
 
@@ -124,44 +102,23 @@ export function YoutubeSearch({
                     selectedVideoId === video.id ? "border-primary" : ""
                   }`}
                 >
-                  <div
-                    className="relative cursor-pointer"
-                    onClick={() => togglePreview(video.id)}
-                  >
-                    <Image
-                      src={video.thumbnailUrl || "/placeholder.svg"}
-                      alt={video.title}
-                      className="rounded"
-                      width={150}
-                      height={100}
-                    />
+                  <div className="relative cursor-pointer" onClick={() => togglePreview(video.id)}>
+                    <Image src={video.thumbnailUrl || "/placeholder.svg"} alt={video.title} className="rounded" width={150} height={100} />
                     <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded opacity-0 hover:opacity-100 transition-opacity">
-                      {previewVideoId === video.id ? (
-                        <Pause className="h-8 w-8 text-white" />
-                      ) : (
-                        <Play className="h-8 w-8 text-white" />
-                      )}
+                      {previewVideoId === video.id ? <Pause className="h-8 w-8 text-white" /> : <Play className="h-8 w-8 text-white" />}
                     </div>
                   </div>
 
                   <div className="flex-1">
                     <p className="font-medium line-clamp-2">{video.title}</p>
-                    <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
-                      {/* {video.description} */}
-                    </p>
+                    <p className="text-sm text-muted-foreground mt-1 line-clamp-1">{/* {video.description} */}</p>
 
                     <div className="flex justify-between items-center">
                       <Button
-                        variant={
-                          currentYoutubeVideo?.id === video.id
-                            ? "secondary"
-                            : "outline"
-                        }
+                        variant={currentYoutubeVideo?.id === video.id ? "secondary" : "outline"}
                         size="sm"
                         className={`mt-2 w-full hover:cursor-pointer ${
-                          currentYoutubeVideo?.id === video.id
-                            ? "bg-card-foreground hover:bg-card-foreground/80"
-                            : "hover:bg-card-foreground"
+                          currentYoutubeVideo?.id === video.id ? "bg-card-foreground hover:bg-card-foreground/80" : "hover:bg-card-foreground"
                         }`}
                         onClick={() => handleSelectVideo(video.id)}
                         disabled={updating && selectedVideoId === video.id}
@@ -200,9 +157,7 @@ export function YoutubeSearch({
               </div>
             ))
           ) : (
-            <p className="text-center text-muted-foreground py-4">
-              No results found
-            </p>
+            <p className="text-center text-muted-foreground py-4">No results found</p>
           )}
         </div>
       )}

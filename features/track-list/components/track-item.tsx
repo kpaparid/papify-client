@@ -4,22 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import {
-  Play,
-  ExternalLink,
-  Pause,
-  Edit,
-  Trash2,
-  MoreVertical,
-} from "lucide-react";
+import { Play, ExternalLink, Pause, Edit, Trash2, MoreVertical } from "lucide-react";
 import { useState } from "react";
 import { formatDate, formatDistanceToNow } from "date-fns";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import YouTube from "react-youtube";
 
@@ -54,6 +42,7 @@ export interface TrackData {
   _id: string;
   id: string;
   collectionIds: string[];
+  allCollectionIds: string[];
   downloading: boolean;
   youtube: {
     query: string;
@@ -69,24 +58,7 @@ export interface TrackData {
 }
 
 export default function TrackItem(track: TrackData) {
-  const [currentlyPlaying, setCurrentlyPlaying] = useState<string | null>(null);
   const [showYoutubePlayer, setShowYoutubePlayer] = useState(false);
-
-  const togglePlay = (trackId: string) => {
-    setCurrentlyPlaying(currentlyPlaying === trackId ? null : trackId);
-  };
-
-  function formatDuration(ms: number): string {
-    const minutes = Math.floor(ms / 60000);
-    const seconds = Math.floor((ms % 60000) / 1000);
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  }
-
-  function formatFileSize(bytes: number): string {
-    if (bytes < 1024) return bytes + " B";
-    else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + " KB";
-    else return (bytes / 1048576).toFixed(1) + " MB";
-  }
 
   const handleEdit = () => {
     console.log("Edit track:", track._id);
@@ -109,26 +81,18 @@ export default function TrackItem(track: TrackData) {
           <div className="flex items-center">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 rounded-full text-muted-foreground"
-                >
+                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-muted-foreground">
                   <MoreVertical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={handleEdit} asChild>
-                  <Link href={`/edit/${track._id}`}>
+                  <Link href={`/edit?q=${track.youtube[0].query}`}>
                     <Edit className="h-4 w-4 mr-2" />
                     Edit
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={handleDelete}
-                  className="text-destructive"
-                  asChild
-                >
+                <DropdownMenuItem onClick={handleDelete} className="text-destructive" asChild>
                   <Link href={`/tracks/edit/${track._id}`}>
                     <Trash2 className="h-4 w-4 mr-2" />
                     Delete
@@ -143,27 +107,18 @@ export default function TrackItem(track: TrackData) {
         <div className="flex flex-col items-center md:flex-row">
           {/* Album Art with play overlay */}
           <div className="relative w-full md:w-48 h-48">
-            <div
-              className="relative h-full w-full cursor-pointer group"
-              onClick={toggleYoutubePlayer}
-            >
+            <div className="relative h-full w-full cursor-pointer group" onClick={toggleYoutubePlayer}>
               <Image
                 src={
                   // track.youtube[0].images[0] ||
-                  track.spotify.album.images[0] ||
-                  "/placeholder.svg?height=300&width=300" ||
-                  "/placeholder.svg"
+                  track.spotify.album.images[0] || "/placeholder.svg?height=300&width=300" || "/placeholder.svg"
                 }
                 alt={track.spotify.album.name}
                 fill
                 className="object-cover rounded-md"
               />
               <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-md">
-                {showYoutubePlayer ? (
-                  <Pause className="h-12 w-12 text-white" />
-                ) : (
-                  <Play className="h-12 w-12 text-white" />
-                )}
+                {showYoutubePlayer ? <Pause className="h-12 w-12 text-white" /> : <Play className="h-12 w-12 text-white" />}
               </div>
             </div>
           </div>
@@ -183,14 +138,9 @@ export default function TrackItem(track: TrackData) {
                 </div>
                 <div className="grid grid-cols-2">
                   <div className="text-sm text-muted-foreground">
-                    Album: {track.spotify.album.name}{" "}
-                    {`(${new Date(
-                      track.spotify.album.release_date
-                    ).getFullYear()})`}
+                    Album: {track.spotify.album.name} {`(${new Date(track.spotify.album.release_date).getFullYear()})`}
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    Spotify: {track.spotify.spotifyId}
-                  </div>
+                  <div className="text-sm text-muted-foreground">Spotify: {track.spotify.spotifyId}</div>
                 </div>
               </div>
             </div>
@@ -203,23 +153,14 @@ export default function TrackItem(track: TrackData) {
                 {track.storage ? (
                   <div className="text-sm text-muted-foreground mt-1">
                     <div>File: {track.storage.name}</div>
-                    <div>
-                      Added:{" "}
-                      {formatDistanceToNow(
-                        new Date(track.storage.createdTime),
-                        { addSuffix: true }
-                      )}
-                    </div>
+                    <div>Added: {formatDistanceToNow(new Date(track.storage.createdTime), { addSuffix: true })}</div>
                   </div>
                 ) : (
                   <div>
                     <div className="text-sm text-muted-foreground mt-1">
                       <div>File: Not downloaded yet</div>
                       <div>
-                        Downloading:{" "}
-                        <span className="capitalize">
-                          {track.downloading.toString()}
-                        </span>
+                        Downloading: <span className="capitalize">{track.downloading.toString()}</span>
                       </div>
                     </div>
                   </div>
@@ -239,12 +180,8 @@ export default function TrackItem(track: TrackData) {
                       <ExternalLink className="h-3 w-3" />
                     </a>
                   </h3>
-                  <div className="text-sm text-muted-foreground mt-1 line-clamp-1">
-                    {track.youtube[0].title}
-                  </div>
-                  <div className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                    {formatDate(track.youtube[0].publish_date, "dd.MM.yyyy")}
-                  </div>
+                  <div className="text-sm text-muted-foreground mt-1 line-clamp-1">{track.youtube[0].title}</div>
+                  <div className="text-sm text-muted-foreground mt-1 line-clamp-2">{formatDate(track.youtube[0].publish_date, "dd.MM.yyyy")}</div>
                 </div>
               )}
             </div>

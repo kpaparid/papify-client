@@ -1,4 +1,4 @@
-import { fetchSpotifySearch } from "@/app/api";
+import { fetchSpotifySearch } from "@/features/api";
 import { SearchTabs } from "../components/search-tabs";
 import { AlbumGrid } from "../components/album-grid";
 

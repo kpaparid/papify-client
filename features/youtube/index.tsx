@@ -1,18 +1,38 @@
-import { fetchGoogleDriveTracks, fetchYoutubeTracks } from "@/app/api";
+import { fetchGoogleDriveTracks, fetchYoutubeTracks } from "@/features/api";
 import Header from "@/components/header";
 import Metrics from "@/components/metrics";
 import { Button } from "@/components/ui/button";
-import { RefreshCw } from "lucide-react";
+import { Check, RefreshCw } from "lucide-react";
 import { format, isToday } from "date-fns";
-import {
-  refetchGoogleDriveTracks,
-  refetchYoutubeTracks,
-} from "../google-drive/actions";
-import { TrackItem } from "./track-item";
+import List from "../google-drive/list";
+import { refetchYoutubeTracks, removeYoutubeQueryAction } from "./actions";
 
 export default async function Youtube() {
   const { data: tracks, date } = await fetchYoutubeTracks();
   console.log("Youtube tracks", tracks);
+  const items = tracks.map((track) => {
+    return {
+      id: track._id,
+      image: track.images[0],
+      title: track.query.split(" - ")[0],
+      description: `${track.query.split(" - ")[1]} - ${track.youtubeId} - ${track.spotifyId}`,
+      badgeText: typeof track.collectionIds !== "undefined" ? "In Collection" : undefined,
+      badgeIcon: <Check />,
+      labels: track?.collectionIds?.map((id) => ({ text: id })),
+      deleteAction: removeYoutubeQueryAction,
+      editHref: `/edit?q=${track.query}`,
+      meta: {
+        isSaved: track.isSaved,
+        isNotSaved: !track.isSaved,
+        publishDate: new Date(track.publish_date).getTime(),
+        title: track.query.split(" - ")[0],
+        query: track.query,
+        youtubeId: track.youtubeId,
+        spotifyId: track.spotifyId,
+        collectionIds: track.collectionIds,
+      },
+    };
+  });
   return (
     <div className="w-full mx-auto max-w-[1320px] space-y-6">
       <Header title="Youtube Queries" subtitle="Manage your youtube searches" />
@@ -21,48 +41,31 @@ export default async function Youtube() {
           { label: "Total Queries", value: tracks.length },
           {
             label: "In Collections",
-            value: tracks.filter(
-              ({ collectionIds }) => typeof collectionIds !== "undefined"
-            ).length,
-            badge: `${
-              (tracks.filter(
-                ({ collectionIds }) => typeof collectionIds !== "undefined"
-              ).length *
-                100) /
-              tracks.length
-            }%`,
+            value: tracks.filter(({ collectionIds }) => typeof collectionIds !== "undefined").length,
+            badge: `${Math.floor((tracks.filter(({ collectionIds }) => typeof collectionIds !== "undefined").length * 100) / tracks.length)}%`,
           },
           {
             label: "Not in Collections",
-            value: tracks.filter(
-              ({ collectionIds }) => typeof collectionIds === "undefined"
-            ).length,
+            value: tracks.filter(({ collectionIds }) => typeof collectionIds === "undefined").length,
           },
         ]}
       />
-
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-bold">Your Youtube Queries</h2>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">
-            Last synced:{" "}
-            {`${isToday(new Date()) ? "Today" : format(new Date(), "PPP")} at
-            ${format(new Date(), "h:mm a")}`}
-          </span>
-          <form action={refetchYoutubeTracks}>
-            <Button type="submit" variant="outline" size="sm" className="gap-2">
-              <RefreshCw className="h-3.5 w-3.5" />
-              Refresh
-            </Button>
-          </form>
-        </div>
-      </div>
-
-      <div className="space-y-3 mb-6">
-        {tracks.map((track) => (
-          <TrackItem key={track.youtubeId} {...track} />
-        ))}
-      </div>
+      <List
+        title="Your Youtube Queries"
+        date={new Date(date).toISOString()}
+        refetch={refetchYoutubeTracks}
+        items={items}
+        sort={[
+          { field: "title", label: "Title" },
+          { field: "query", label: "Query" },
+          { field: "isSaved", label: "Saved" },
+          { field: "publishDate", label: "Publish Date", type: "date" },
+        ]}
+        filters={[
+          { field: "isSaved", label: "Saved" },
+          { field: "isNotSaved", label: "Not Saved" },
+        ]}
+      />
     </div>
   );
 }

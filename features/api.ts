@@ -6,6 +6,7 @@ import {
   SearchResultType,
   YoutubeTrack,
 } from "@/features/spotify/types"
+import { YouTubeVideo } from "@/features/track-list/actions"
 import { TrackData } from "@/features/track-list/components/track-item"
 
 // const API_URL = process.env.API_URL+'/api'
@@ -37,10 +38,11 @@ export const fetchYoutubeTracks = (
       date: Date.now(), // timestamp in milliseconds
     }))
 
-export const fetchSavedTracks = (tags?: string[]): Promise<TrackData[]> =>
-  fetch(API_URL + "/tracks", { next: { revalidate: 60, tags } }).then((res) =>
-    res.json()
-  )
+export const fetchSavedTracks = (tags?: string[]): Promise<{data:TrackData[], date: number}> => fetch(API_URL + "/tracks", { next: { revalidate: 60, tags } }).then((res) => res.json())
+.then((data) => ({
+  data,
+  date: Date.now(), // timestamp in milliseconds
+}))
 export const refetchTracks = (tags?: string[]): Promise<TrackData[]> =>
   fetch(API_URL + "/tracks", { next: { tags } }).then((res) => res.json())
 export const fetchSpotifySearch = (
@@ -92,3 +94,6 @@ export const toggleSaveSpotifyTrack = (
         next: { tags },
       })
 }
+
+export const fetchMoreYoutubeTracks = (query: string) : Promise<YoutubeTrack[]> => fetch(
+  API_URL + `/youtube-tracks/${query}/alternatives`).then(res => res.json())

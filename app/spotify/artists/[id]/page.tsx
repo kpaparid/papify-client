@@ -1,4 +1,4 @@
-import { fetchSpotifyArtist } from "@/app/api";
+import { fetchSpotifyArtist } from "@/features/api";
 import BackButton from "@/components/back-button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { List } from "@/features/spotify/components/track-list-2";
@@ -21,30 +21,15 @@ export default async function Page({ params }: { params: { id: string } }) {
         <BackButton />
         <div className="flex flex-col md:flex-row gap-8 mb-8">
           <div className="relative flex-shrink-0 shadow-2xl">
-            <Image
-              src={artist.images[0] || "/placeholder.svg"}
-              alt={artist.id}
-              width={220}
-              height={220}
-              className="rounded-md object-cover"
-              priority
-            />
+            <Image src={artist.images[0] || "/placeholder.svg"} alt={artist.id} width={220} height={220} className="rounded-md object-cover" priority />
           </div>
           <div className="flex flex-col justify-center">
-            <div className="text-xs font-medium bg-[#183D3D] px-2 py-1 rounded-full uppercase mb-3 inline-block w-fit">
-              Artist
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-2">
-              {artist.name}
-            </h1>
+            <div className="text-xs font-medium bg-[#183D3D] px-2 py-1 rounded-full uppercase mb-3 inline-block w-fit">Artist</div>
+            <h1 className="text-4xl md:text-6xl font-bold mb-2">{artist.name}</h1>
             <div className="flex items-center gap-2 mt-4">
               <div className="text-sm">
-                <div className="text-muted-foreground font-semibold">
-                  {formatFollowers(artist.followers)}
-                </div>
-                <div className="text-muted-foreground font-semibold capitalize">
-                  {artist.genres.join(", ")}
-                </div>
+                <div className="text-muted-foreground font-semibold">{formatFollowers(artist.followers)}</div>
+                <div className="text-muted-foreground font-semibold capitalize">{artist.genres.join(", ")}</div>
                 <div className="mt-4">
                   <div className="w-full min-w-80">
                     <div className="flex flex-row justify-between text-sm text-foreground/75 font-semibold mb-1">
@@ -52,10 +37,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                       <span>{artist.popularity}%</span>
                     </div>
                     <div className="h-1.5 bg-accent rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-foreground rounded-full"
-                        style={{ width: `${artist.popularity}%` }}
-                      />
+                      <div className="h-full bg-foreground rounded-full" style={{ width: `${artist.popularity}%` }} />
                     </div>
                   </div>
                 </div>
@@ -65,22 +47,13 @@ export default async function Page({ params }: { params: { id: string } }) {
         </div>
         <Tabs defaultValue="tracks" className="w-full">
           <TabsList className="bg-accent/40 gap-3">
-            <TabsTrigger
-              className="cursor-pointer hover:brightness-110"
-              value="tracks"
-            >
+            <TabsTrigger className="cursor-pointer hover:brightness-110" value="tracks">
               Tracks
             </TabsTrigger>
-            <TabsTrigger
-              className="cursor-pointer hover:brightness-110"
-              value="albums"
-            >
+            <TabsTrigger className="cursor-pointer hover:brightness-110" value="albums">
               Albums
             </TabsTrigger>
-            <TabsTrigger
-              className="cursor-pointer hover:brightness-110"
-              value="playlists"
-            >
+            <TabsTrigger className="cursor-pointer hover:brightness-110" value="playlists">
               Playlists
             </TabsTrigger>
           </TabsList>

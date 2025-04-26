@@ -4,7 +4,7 @@ import { TopResult } from "./top-result";
 import { TrackList } from "./track-list";
 import { AlbumGrid } from "./album-grid";
 import { PlaylistGrid } from "./playlist-grid";
-import { fetchSpotifySearch } from "@/app/api";
+import { fetchSpotifySearch } from "@/features/api";
 import { ArtistGrid } from "./artist-grid";
 
 interface SearchResultsProps {

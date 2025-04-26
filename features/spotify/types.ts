@@ -254,12 +254,11 @@ export interface YoutubeTrack {
   spotifyId: string
   youtubeId: string
   title: string
-  publish_date: {
-    $date: string
-  }
+  publish_date: string
   images: string[]
   description: string
   __v: number
   collectionIds?: string[]
   isSaved: boolean
 }
+
