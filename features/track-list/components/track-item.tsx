@@ -87,7 +87,7 @@ export default function TrackItem(track: TrackData) {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={handleEdit} asChild>
-                  <Link href={`/edit?q=${track.youtube[0].query}`}>
+                  <Link href={`/edit?youtubeId=${track.youtube[0].youtubeId}&q=${track.youtube[0].query}`}>
                     <Edit className="h-4 w-4 mr-2" />
                     Edit
                   </Link>

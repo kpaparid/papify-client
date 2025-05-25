@@ -1,16 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Play } from "lucide-react";
-import { SearchArtistType } from "../types";
 import GridList from "@/components/grid-list";
+import { SearchArtistType } from "../types";
 
-export function ArtistGrid({
-  artists,
-  limit,
-}: {
-  artists: SearchArtistType[];
-  limit?: number;
-}) {
+export function ArtistGrid({ artists, limit }: { artists: SearchArtistType[]; limit?: number }) {
   const displayArtists = limit ? artists.slice(0, limit) : artists;
   return (
     <GridList

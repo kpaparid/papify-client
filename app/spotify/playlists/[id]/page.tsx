@@ -32,8 +32,9 @@ export default async function Page({ params }: { params: { id: string } }) {
         <List
           items={playlist.tracks.map((track) => ({
             id: track.id,
-            href: `/spotify/tracks/${track.id}`,
+            youtubeSearchQuery: `id=${track.id}&artists=${track.artists.map((artist) => artist.name).join(",")}&title=${track.name}`,
             name: track.name,
+            popularity: track.popularity,
             hasSave: true,
             isSaved: track.isSaved,
             image: track.album[0].images[0],

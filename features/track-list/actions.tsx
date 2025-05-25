@@ -1,6 +1,6 @@
 "use server";
 
-import { toggleSaveSpotifyTrack } from "@/features/api";
+import { editYoutubeQuery, toggleSaveSpotifyTrack } from "@/features/api";
 import { revalidatePath, revalidateTag } from "next/cache";
 
 export interface YouTubeVideo {
@@ -8,6 +8,16 @@ export interface YouTubeVideo {
   title: string;
   thumbnailUrl: string;
   channelTitle: string;
+  description: string;
+}
+export interface YoutubeQueryVideo {
+  _id: string;
+  query: string;
+  spotifyId: string;
+  youtubeId: string;
+  title: string;
+  publish_date: string;
+  images: string[];
   description: string;
 }
 
@@ -83,4 +93,20 @@ export async function refetchSavedTracks() {
 
 export async function deleteSpotifyTrackAction(spotifyId: string) {
   return toggleSpotifyTrackAction(spotifyId, false);
+}
+
+export async function editYoutubeQueryAction(
+  id: string,
+  body: {
+    youtubeId?: string;
+    title?: string;
+    publish_date?: string;
+    images?: string[];
+    description?: string;
+  }
+) {
+  console.log(body);
+  const res = await editYoutubeQuery(id, body);
+  console.log({ res });
+  return res;
 }

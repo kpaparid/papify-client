@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Circle, CircleCheck, Clock, Pause, PlayIcon, Search } from "lucide-react";
+import ActionButton from "@/features/spotify/components/action-button";
+import { editYoutubeQueryAction } from "../actions";
 
 export interface YoutubeTrack {
   _id: string;
@@ -20,9 +22,7 @@ export interface YoutubeTrack {
   spotifyId: string;
   youtubeId: string;
   title: string;
-  publish_date: {
-    $date: string;
-  };
+  publish_date: string;
   images: string[];
   description: string;
   __v: number;
@@ -31,23 +31,29 @@ export interface YoutubeTrack {
 }
 
 interface EditYoutubeDialogProps {
+  searchId: string;
+  youtubeId: string;
   tracks: YoutubeTrack[];
   query: string;
   query2: string;
 }
 
-export function EditTrackModal({ query, query2, tracks }: EditYoutubeDialogProps) {
+export function EditTrackModal({ searchId, youtubeId, query, query2, tracks }: EditYoutubeDialogProps) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState(query2 || query || "");
   const [previewVideoId, setPreviewVideoId] = useState<string | null>(null);
-  const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null);
-  const [expandedDescription, setExpandedDescription] = useState<string | null>(null);
+  const [selectedVideoId, setSelectedVideoId] = useState<string | null>(youtubeId ? youtubeId : null);
   console.log(selectedVideoId);
+  console.log(tracks);
 
   const handleClose = () => router.back();
 
   const handleSearch = () => {
-    router.replace(searchQuery ? `/edit?q=${query}&q2=${searchQuery}` : `/edit?q=${query}`);
+    router.replace(
+      searchQuery
+        ? `/youtube-search/${searchId}/edit?youtubeId=${youtubeId}&q=${query}&q2=${searchQuery}`
+        : `/youtube-search/${searchId}/edit?youtubeId=${youtubeId}&q=${query}`
+    );
   };
 
   const togglePreview = (videoId: string) => {
@@ -57,29 +63,17 @@ export function EditTrackModal({ query, query2, tracks }: EditYoutubeDialogProps
       setPreviewVideoId(videoId);
     }
   };
+  const track = tracks.find((track) => track.youtubeId === selectedVideoId);
+  const action = editYoutubeQueryAction.bind(null, searchId, {
+    youtubeId: track?.youtubeId,
+    title: track?.title,
+    publish_date: track?.publish_date,
+    images: track?.images,
+    description: track?.description,
+  });
 
-  const handleSave = () => {
-    // Implement save functionality here
-    // Then close the dialog
-    handleClose();
-  };
-
-  // Extract channel name from title or description
-  const extractChannelName = (track: YoutubeTrack): string => {
-    // This is a simplified example - you might need more sophisticated logic
-    const descriptionMatch = track.description.match(/Channel:\s*([^\n]+)/i);
-    if (descriptionMatch) return descriptionMatch[1].trim();
-
-    // Fallback to extracting from title if common pattern exists
-    const titleParts = track.title.split(" - ");
-    if (titleParts.length > 1) return titleParts[0].trim();
-
-    return "YouTube Channel";
-  };
-
-  // Get a truncated description
-  const getTruncatedDescription = (description: string): string => {
-    return description.length > 120 ? `${description.substring(0, 120)}...` : description;
+  const handleSave = async () => {
+    return action().then(() => handleClose());
   };
 
   return (
@@ -154,29 +148,6 @@ export function EditTrackModal({ query, query2, tracks }: EditYoutubeDialogProps
                                 </Badge>
                               )}
                             </div>
-                            {/* <Button
-                            variant={
-                              selectedVideoId === track.youtubeId
-                                ? "secondary"
-                                : "outline"
-                            }
-                            size="sm"
-                            className={`hover:cursor-pointer ${
-                              selectedVideoId === track.youtubeId
-                                ? "bg-card-foreground hover:bg-card-foreground/80"
-                                : "hover:bg-card-foreground hover:text-secondary-foreground"
-                            }`}
-                            onClick={() => setSelectedVideoId(track.youtubeId)}
-                          >
-                            {selectedVideoId === track.youtubeId ? (
-                              <>
-                                <CircleCheck className="h-3 w-3 mr-1" />
-                                Selected
-                              </>
-                            ) : (
-                              "Select"
-                            )}
-                          </Button> */}
                           </div>
 
                           {/* Description preview */}
@@ -222,14 +193,14 @@ export function EditTrackModal({ query, query2, tracks }: EditYoutubeDialogProps
             <Button variant="outline" className="cursor-pointer bg-card border-primary" onClick={handleClose}>
               Cancel
             </Button>
-            <Button
+            <ActionButton
               variant={"outline"}
               className="cursor-pointer bg-foreground! text-primary! hover:brightness-80 border-primary"
-              onClick={handleSave}
+              action={handleSave}
               disabled={!selectedVideoId}
             >
               Save Changes
-            </Button>
+            </ActionButton>
           </DialogFooter>
         </div>
       </DialogContent>

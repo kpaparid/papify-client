@@ -1,11 +1,11 @@
 "use server";
 
-import { removeGoogleDriveTrack } from "@/features/api";
+import { removeGoogleDriveTrack, removeYoutubeQuery } from "@/features/api";
 import { revalidatePath } from "next/cache";
 
-export async function removeYoutubeQueryAction(storageId: string): Promise<void> {
+export async function removeYoutubeQueryAction(id: string): Promise<void> {
   try {
-    // const response = await removeYoutubeQuery(storageId)
+    const response = await removeYoutubeQuery(id);
     revalidatePath("/youtube");
   } catch (error) {
     console.error("Error deleting track:", error);

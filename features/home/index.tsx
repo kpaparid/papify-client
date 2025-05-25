@@ -6,7 +6,9 @@ import Header from "@/components/header";
 import { fetchSavedTracks } from "@/features/api";
 
 export default async function Home() {
-  const { data: tracks, date } = await fetchSavedTracks();
+  const data = await fetchSavedTracks();
+  console.log(data);
+  const { data: tracks, date } = data;
 
   const totalTracks = tracks.length;
   const downloadedTracks = tracks.filter(({ storage }) => !!storage).length;

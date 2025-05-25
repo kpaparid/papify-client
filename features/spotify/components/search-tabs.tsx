@@ -35,7 +35,7 @@ export function SearchTabs({ activeTab, query }: SearchTabsProps) {
   ];
 
   return (
-    <div className="border-b border-card-foreground/10">
+    <div className="border-b border-accent/50">
       <nav className="flex space-x-4">
         {tabs.map((tab) => (
           <Link

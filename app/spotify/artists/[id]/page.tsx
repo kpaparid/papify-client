@@ -65,7 +65,9 @@ export default async function Page({ params }: { params: { id: string } }) {
                 name: track.name,
                 hasSave: true,
                 isSaved: track.isSaved,
-                duration: track.duration_ms,
+                popularity: track.popularity,
+                // duration: track.duration_ms,
+                youtubeSearchQuery: `id=${track.id}&artists=${track.artists.map((artist) => artist.name).join(",")}&title=${track.name}`,
                 links: track.artists.map((artist) => ({
                   label: artist.name,
                   href: `/spotify/artists/${artist.id}`,

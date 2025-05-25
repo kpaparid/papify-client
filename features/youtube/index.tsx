@@ -9,7 +9,6 @@ import { refetchYoutubeTracks, removeYoutubeQueryAction } from "./actions";
 
 export default async function Youtube() {
   const { data: tracks, date } = await fetchYoutubeTracks();
-  console.log("Youtube tracks", tracks);
   const items = tracks.map((track) => {
     return {
       id: track._id,
@@ -20,7 +19,8 @@ export default async function Youtube() {
       badgeIcon: <Check />,
       labels: track?.collectionIds?.map((id) => ({ text: id })),
       deleteAction: removeYoutubeQueryAction,
-      editHref: `/edit?q=${track.query}`,
+      editHref: `/youtube-search/${track._id}/edit?youtubeId=${track.youtubeId}&q=${track.query}`,
+      youtubeId: track.youtubeId,
       meta: {
         isSaved: track.isSaved,
         isNotSaved: !track.isSaved,

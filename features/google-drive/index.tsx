@@ -17,6 +17,7 @@ export default async function GoogleDrive() {
       badgeIcon: <Check />,
       labels: track?.collectionIds?.map((id) => ({ text: id })),
       deleteAction: removeGoogleDriveTrackAction,
+      youtubeId: track.appProperties.youtubeId,
       meta: {
         isSaved: track.isSaved,
         date: new Date(track.createdTime).getTime(),
@@ -38,7 +39,7 @@ export default async function GoogleDrive() {
           {
             label: "In Collections",
             value: tracks.filter(({ collectionIds }) => typeof collectionIds !== "undefined").length,
-            badge: `${(tracks.filter(({ collectionIds }) => typeof collectionIds !== "undefined").length * 100) / tracks.length}%`,
+            badge: `${Math.floor((tracks.filter(({ collectionIds }) => typeof collectionIds !== "undefined").length * 100) / tracks.length)}%`,
           },
           {
             label: "Not in Collections",

@@ -46,11 +46,11 @@ export default async function Page({ params }: { params: { id: string } }) {
         <List
           items={album.tracks.map((track) => ({
             id: track.id,
-            href: `/spotify/tracks/${track.id}`,
             name: track.name,
             hasSave: true,
             isSaved: track.isSaved,
             duration: track.duration_ms,
+            youtubeSearchQuery: `id=${track.id}&artists=${track.artists.map((artist) => artist.name).join(",")}&title=${track.name}`,
             links: track.artists.map((artist) => ({
               label: artist.name,
               href: `/spotify/artists/${artist.id}`,
