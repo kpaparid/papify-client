@@ -87,7 +87,7 @@ export default function TrackItem(track: TrackData) {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={handleEdit} asChild>
-                  <Link href={`/edit?youtubeId=${track.youtube[0].youtubeId}&q=${track.youtube[0].query}`}>
+                  <Link href={`/edit?youtubeId=${track.youtube[0]?.youtubeId}&q=${track.youtube[0]?.query}`}>
                     <Edit className="h-4 w-4 mr-2" />
                     Edit
                   </Link>
@@ -172,7 +172,7 @@ export default function TrackItem(track: TrackData) {
                   <h3 className="text-sm font-medium flex items-center gap-2">
                     YouTube
                     <a
-                      href={`https://www.youtube.com/watch?v=${track.youtube[0].youtubeId}`}
+                      href={`https://www.youtube.com/watch?v=${track.youtube[0]?.youtubeId}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center"
@@ -180,8 +180,8 @@ export default function TrackItem(track: TrackData) {
                       <ExternalLink className="h-3 w-3" />
                     </a>
                   </h3>
-                  <div className="text-sm text-muted-foreground mt-1 line-clamp-1">{track.youtube[0].title}</div>
-                  <div className="text-sm text-muted-foreground mt-1 line-clamp-2">{formatDate(track.youtube[0].publish_date, "dd.MM.yyyy")}</div>
+                  <div className="text-sm text-muted-foreground mt-1 line-clamp-1">{track.youtube[0]?.title}</div>
+                  <div className="text-sm text-muted-foreground mt-1 line-clamp-2">{formatDate(track.youtube[0]?.publish_date, "dd.MM.yyyy")}</div>
                 </div>
               )}
             </div>
@@ -192,7 +192,7 @@ export default function TrackItem(track: TrackData) {
         {showYoutubePlayer && track.youtube && track.youtube.length > 0 && (
           <div className="mt-4 rounded-md overflow-hidden">
             <YouTube
-              videoId={track.youtube[0].youtubeId}
+              videoId={track.youtube[0]?.youtubeId}
               opts={{
                 width: "100%",
                 height: "300",

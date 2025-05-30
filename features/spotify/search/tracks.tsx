@@ -19,7 +19,7 @@ export default async function Tracks({ query }: { query: string }) {
               type: "track",
               hasSave: true,
               youtubeSearchQuery: `id=${track.id}&artists=${track.artists.map((artist) => artist.name).join(",")}&title=${track.name}`,
-              image: track.album.images[0],
+              image: track.album.images?.[0],
               links: track.artists.map((artist) => ({
                 href: `/spotify/artists/${artist.id}`,
                 label: artist.name,

@@ -62,6 +62,8 @@ export const toggleSaveSpotifyTrack = (id: string, save: boolean, tags?: string[
       });
 };
 
+export const saveSpotifyTracks = (ids: string[], tags?: string[]) => fetch(API_URL + `/tracks/${ids.join(',')}/save`, { method: "PUT", next: { tags } }).then((res) => res.json());
+
 export const fetchMoreYoutubeTracks = (query: string): Promise<YoutubeTrack[]> =>
   fetch(API_URL + `/youtube-tracks/${query}/alternatives`).then((res) => res.json());
 

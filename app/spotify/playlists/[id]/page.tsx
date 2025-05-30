@@ -3,6 +3,7 @@ import BackButton from "@/components/back-button";
 import { List } from "@/features/spotify/components/track-list-2";
 import Image from "next/image";
 import Link from "next/link";
+import SaveAll from "@/components/save-all";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = await params;
@@ -30,6 +31,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           </div>
         </div>
         <List
+          hasSaveAll
           items={playlist.tracks.map((track) => ({
             id: track.id,
             youtubeSearchQuery: `id=${track.id}&artists=${track.artists.map((artist) => artist.name).join(",")}&title=${track.name}`,

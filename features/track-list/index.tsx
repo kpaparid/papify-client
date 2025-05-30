@@ -17,11 +17,12 @@ import { type TrackData } from "./components/track-item";
 
 export default function MusicTrackList({ tracks, date }: { tracks: TrackData[]; date: number }) {
   const items = tracks.map((track) => {
+    console.log(track.youtube[0]);
     return {
       id: track.id,
       image: track.spotify.album.images[0],
       title: track.spotify.name,
-      editHref: `/youtube-search/${track.youtube[0]._id}/edit?youtubeId=${track.youtube[0].youtubeId}&q=${track.youtube[0].query}`,
+      editHref: `/youtube-search/${track.youtube[0]?._id}/edit?youtubeId=${track.youtube[0]?.youtubeId}&q=${track.youtube[0]?.query}`,
       deleteAction: deleteSpotifyTrackAction,
       description: track.spotify.artists.map((artist) => artist.name).join(", "),
       labels: track?.allCollectionIds?.map((id) => ({
@@ -30,18 +31,18 @@ export default function MusicTrackList({ tracks, date }: { tracks: TrackData[]; 
         isActive: track.collectionIds.includes(id),
         onClick: () => null,
       })),
-      youtubeId: track.youtube[0].youtubeId,
+      youtubeId: track.youtube[0]?.youtubeId,
       meta: {
         ...track,
         name: track.spotify.name,
         artists: track.spotify.artists || track.spotify.album.artists,
         album: track.spotify.album,
         downloaded: !!track.storage,
-        youtubeId: track.youtube[0].youtubeId,
+        youtubeId: track.youtube[0]?.youtubeId,
         spotifyId: track.spotify.spotifyId,
         storageId: track.storage?.storageId,
-        query: track.youtube[0].query,
-        title: track.youtube[0].title,
+        query: track.youtube[0]?.query,
+        title: track.youtube[0]?.title,
         date: track.spotify.album.release_date,
         ...track.collectionIds.map((id) => ({ [id]: true })),
       } as unknown as ListItem["meta"],

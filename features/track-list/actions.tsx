@@ -1,6 +1,6 @@
 "use server";
 
-import { editYoutubeQuery, toggleSaveSpotifyTrack } from "@/features/api";
+import { editYoutubeQuery, saveSpotifyTracks, toggleSaveSpotifyTrack } from "@/features/api";
 import { revalidatePath, revalidateTag } from "next/cache";
 
 export interface YouTubeVideo {
@@ -108,5 +108,10 @@ export async function editYoutubeQueryAction(
   console.log(body);
   const res = await editYoutubeQuery(id, body);
   console.log({ res });
+  return res;
+}
+
+export async function saveSpotifyTracksAction(spotifyIds: string[]) {
+  const res = await saveSpotifyTracks(spotifyIds);
   return res;
 }
