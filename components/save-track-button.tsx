@@ -8,7 +8,7 @@ import ActionButton from "@/features/spotify/components/action-button";
 export default function SaveTrackButton({ className, isSaved, spotifyId }: { className?: string; isSaved: boolean; spotifyId: string }) {
   const action = toggleSpotifyTrackAction.bind(null, spotifyId, !isSaved);
   if (isSaved) {
-    console.log("isSaved", spotifyId);
+    // console.log("isSaved", spotifyId);
   }
   return (
     <ActionButton

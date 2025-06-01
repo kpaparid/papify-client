@@ -81,7 +81,7 @@ export const editYoutubeQuery = (
     description?: string;
   }
 ) => {
-  console.log(id, body);
+  // console.log(id, body);
   return fetch(API_URL + `/youtube/tracks/${id}`, {
     method: "PUT",
     headers: {

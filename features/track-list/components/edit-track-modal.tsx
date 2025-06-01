@@ -43,8 +43,8 @@ export function EditTrackModal({ searchId, youtubeId, query, query2, tracks }: E
   const [searchQuery, setSearchQuery] = useState(query2 || query || "");
   const [previewVideoId, setPreviewVideoId] = useState<string | null>(null);
   const [selectedVideoId, setSelectedVideoId] = useState<string | null>(youtubeId ? youtubeId : null);
-  console.log(selectedVideoId);
-  console.log(tracks);
+  // console.log(selectedVideoId);
+  // console.log(tracks);
 
   const handleClose = () => router.back();
 

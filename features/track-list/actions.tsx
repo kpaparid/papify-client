@@ -78,7 +78,7 @@ export async function updateTrackYoutubeVideo(trackId: string, youtubeId: string
 
 export async function toggleSpotifyTrackAction(spotifyId: string, save: boolean) {
   try {
-    console.log({ spotifyId, save });
+    // console.log({ spotifyId, save });
     await toggleSaveSpotifyTrack(spotifyId, save);
     revalidateTag("search");
   } catch (error) {
@@ -105,9 +105,9 @@ export async function editYoutubeQueryAction(
     description?: string;
   }
 ) {
-  console.log(body);
+  // console.log(body);
   const res = await editYoutubeQuery(id, body);
-  console.log({ res });
+  // console.log({ res });
   return res;
 }
 

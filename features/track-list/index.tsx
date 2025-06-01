@@ -17,7 +17,7 @@ import { type TrackData } from "./components/track-item";
 
 export default function MusicTrackList({ tracks, date }: { tracks: TrackData[]; date: number }) {
   const items = tracks.map((track) => {
-    console.log(track.youtube[0]);
+    // console.log(track.youtube[0]);
     return {
       id: track.id,
       image: track.spotify.album.images[0],

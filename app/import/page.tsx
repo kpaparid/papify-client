@@ -2,7 +2,7 @@ import Importer, { SearchResult2 } from "@/features/importer";
 
 export default async function Page({ searchParams }: { searchParams: { q: string } }) {
   const q = (await searchParams).q || "";
-  console.log(q);
+  // console.log(q);
   const fetchData = () =>
     new Promise<SearchResult2[]>((resolve) =>
       setTimeout(
@@ -28,9 +28,9 @@ export default async function Page({ searchParams }: { searchParams: { q: string
         1000
       )
     );
-  if (q) {
-    console.log(JSON.parse(q));
-  }
+  // if (q) {
+  //   console.log(JSON.parse(q));
+  // }
 
   const searchResults = q ? await fetchData() : [];
   return <Importer searchResults={searchResults} />;
