@@ -90,6 +90,16 @@
 }
 
 @layer base {
+   @media (max-width: 1536px) {
+    html {
+      font-size: 14px;
+    }
+  }
+  @media (min-width: 1536px) and (max-width: 2000px) {
+    html {
+      font-size: clamp(14px, calc(14px + (2 * ((100vw - 1536px) / 464))), 16px);
+    }
+  }
   * {
     @apply border-border outline-ring/50;
   }

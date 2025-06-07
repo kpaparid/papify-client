@@ -11,7 +11,8 @@ export default function Metrics({ metrics }: { metrics: Metrics[] }) {
       {metrics.map(({ label, value, badge }, index) => (
         <div
           key={`metric-${index}`}
-          className='group relative overflow-hidden rounded-xl bg-card border-accent px-8 transition-all hover:shadow-lg border py-10'
+          className='group relative overflow-hidden rounded-xl bg-accent/50 border-accent px-8 transition-all hover:shadow-lg border py-10'
+          // className='group relative overflow-hidden rounded-xl bg-card border-accent px-8 transition-all hover:shadow-lg border py-10'
         >
           <div className='relative'>
             <p className='text-sm font-medium text-muted-foreground'>{label}</p>
