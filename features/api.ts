@@ -25,11 +25,14 @@ export const addCategory = (category: string, tags?: string[]): Promise<void> =>
 export const editCategory = (
   category: string,
   newCategory: string
-): Promise<void> =>
-  fetch(API_URL + `/collections/${category}`, {
-    method: "PATCH",
+): Promise<void> => {
+  console.log("Editing category2:", category, "to", newCategory)
+  return fetch(API_URL + `/collections/${category}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name: newCategory }),
   }).then((res) => res.json())
+}
 export const fetchGoogleDriveTracks = (
   tags?: string[]
 ): Promise<{

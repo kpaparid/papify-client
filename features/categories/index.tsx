@@ -78,8 +78,7 @@ export default async function Categories() {
         title='Your Track Categories'
         searchPlaceHolder='Search categories...'
         items={items}
-        sort={[{ field: "name", label: "Name" }]}
-        filters={[{ field: "name", label: "Name" }]}
+        sort={[{ field: "title", label: "Name" }]}
         date={new Date(date).toISOString()}
         refetch={refetchSavedTracks}
       />
