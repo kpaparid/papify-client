@@ -21,6 +21,7 @@ import {
   Pause,
   Pencil,
   Play,
+  Plus,
   RefreshCw,
   Search,
   Trash2,
@@ -36,6 +37,7 @@ export interface ListItem {
   href?: string
   title: string
   description?: string
+  iconPlaceholder?: React.ReactNode
   tableDescription?: string
   badgeText?: string
   badgeIcon?: React.ReactNode
@@ -48,12 +50,21 @@ export interface ListItem {
   meta?: Record<string, ReactNode>
   youtubeId?: string
 }
+export interface TabItem {
+  value: string
+  label: string
+  disabled?: boolean
+  items: ListItem[]
+}
 export interface ListProps {
   title: string
+  addHref?: string
   searchPlaceHolder?: string
-  items: ListItem[]
+  items?: ListItem[]
+  tabs?: TabItem[]
   date: string
   refetch: () => Promise<void>
+  deleteAction?: () => Promise<void>
   defaultView?: "table" | "card"
   multiView?: boolean
   filters?: {
@@ -95,7 +106,10 @@ export default function List({
   defaultView = "card",
   filters,
   searchPlaceHolder = "Search tracks...",
+  addHref,
+  deleteAction,
   sort,
+  tabs,
   renderCardItem = (item: ListItem, youtube, index) => (
     <TableItem index={index} {...item} {...youtube} />
   ),
@@ -108,8 +122,14 @@ export default function List({
   const [filterState, setFilterState] = useState<string[]>([])
   const [sortState, setSortState] = useState<string | null>(null)
   const [youtubePlayerId, setYoutubePlayerId] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<string | null>(
+    tabs?.[0]?.value || null
+  )
   const filteredItems = useMemo(() => {
-    return items.filter((item) => {
+    const activeItems = (
+      tabs ? tabs.find((tab) => tab.value === activeTab)?.items : items
+    ) as ListItem[]
+    return activeItems.filter((item) => {
       if (searchQuery) {
         return (
           item.meta &&
@@ -126,7 +146,7 @@ export default function List({
       }
       return true
     })
-  }, [items, searchQuery, filterState])
+  }, [items, tabs, activeTab, searchQuery, filterState])
 
   const sortedItems = useMemo(() => {
     if (!sortState) return filteredItems
@@ -293,8 +313,38 @@ export default function List({
               </button>
             </div>
           )}
+          {addHref && <TopLink href={addHref} icon={<Plus />} />}
+          {deleteAction && (
+            <TopButton
+              type='destructive'
+              action={deleteAction}
+              icon={<Trash2 />}
+            />
+          )}
         </div>
       </div>
+      {tabs && (
+        <div className='border-b border-accent/50'>
+          <nav className='flex space-x-1'>
+            {tabs.map((tab) => (
+              <Button
+                key={tab.value}
+                disabled={tab.disabled}
+                onClick={() => {
+                  setActiveTab(tab.value)
+                }}
+                className={`px-4 hover:bg-transparent py-2 text-sm font-medium border-b-2 border-b-transparent bg-transparent rounded-none hover:cursor-pointer ${
+                  activeTab === tab.value
+                    ? "text-card-foreground border-b-2 border-card-foreground"
+                    : "text-muted-foreground hover:text-card-foreground hover:border-card-foreground"
+                }`}
+              >
+                {tab.label}
+              </Button>
+            ))}
+          </nav>
+        </div>
+      )}
       <Tabs value={viewMode} className='w-full'>
         <TabsContent value='table'>
           <div className='space-y-3 mb-6'>{renderedTableItems}</div>
@@ -312,6 +362,7 @@ export default function List({
 function TableItem({
   id,
   image,
+  iconPlaceholder,
   title,
   description,
   tableDescription = description,
@@ -332,6 +383,7 @@ function TableItem({
 }: {
   id: string
   index: number
+  iconPlaceholder?: React.ReactNode
   href?: string
   image?: string
   title: string
@@ -391,7 +443,7 @@ function TableItem({
               )}
             </button>
           </div>
-          {image && (
+          {image ? (
             <div className='relative flex-shrink-0'>
               <Image
                 src={image}
@@ -401,6 +453,12 @@ function TableItem({
                 className='object-cover'
               />
             </div>
+          ) : (
+            iconPlaceholder && (
+              <div className='w-[37px] h-[37px] [&>svg]:w-full [&>svg]:h-full border rounded border-accent p-2'>
+                {iconPlaceholder}
+              </div>
+            )
           )}
           <div className='truncate'>
             <div className='truncate font-medium'>
@@ -654,10 +712,12 @@ function TopButton({
   action,
   icon,
   text,
+  type = "default",
 }: {
   action: () => Promise<void>
   icon: ReactElement
   text?: string
+  type?: "default" | "destructive"
 }) {
   return (
     <form action={action}>
@@ -665,12 +725,37 @@ function TopButton({
         type='submit'
         variant='outline'
         size='sm'
-        className='bg-card border-primary h-9 cursor-pointer gap-1 [&>svg]:size-4'
+        className={cn(
+          "bg-card border-primary h-9 cursor-pointer gap-1 [&>svg]:size-4",
+          {
+            "text-muted-foreground hover:text-red-400 hover:bg-red-400/10 [&:hover>svg]:fill-auto":
+              type === "destructive",
+          }
+        )}
       >
         {icon}
         {text}
       </Button>
     </form>
+  )
+}
+function TopLink({
+  href,
+  icon,
+  text,
+}: {
+  href: string
+  icon: ReactElement
+  text?: string
+}) {
+  return (
+    <Link
+      href={href}
+      className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 rounded-md px-3 has-[>svg]:px-2.5 bg-card border-primary h-9 cursor-pointer gap-1 [&>svg]:size-4"
+    >
+      {icon}
+      {text}
+    </Link>
   )
 }
 function Dropdown({

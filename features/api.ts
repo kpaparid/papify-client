@@ -12,6 +12,15 @@ import { TrackData } from "@/features/track-list/components/track-item"
 // const API_URL = process.env.API_URL+'/api'
 const API_URL = "https://papify-backend.onrender.com/api"
 // const API_URL = "http://localhost:5000/api"
+export const fetchCategories = (
+  tags?: string[]
+): Promise<{ name: string; tracks: unknown[] }[]> =>
+  fetch(API_URL + "/collections", { next: { tags } }).then((res) => res.json())
+export const deleteAllTracks = (tags?: string[]): Promise<void> =>
+  fetch(API_URL + "/tracks/delete", {
+    method: "DELETE",
+    next: { tags },
+  }).then((res) => res.json())
 export const deleteCategory = (category: string): Promise<void> =>
   fetch(API_URL + `/collections/${category}`, { method: "DELETE" }).then(
     (res) => res.json()
@@ -60,7 +69,7 @@ export const fetchYoutubeTracks = (
     }))
 
 export const fetchSavedTracks = (
-  tags?: string[]
+  tags: string[] = ["savedTracks"]
 ): Promise<{ data: TrackData[]; date: number }> =>
   fetch(API_URL + "/tracks", { next: { revalidate: 60, tags } })
     .then((res) => res.json())

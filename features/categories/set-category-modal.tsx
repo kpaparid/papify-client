@@ -12,13 +12,15 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import ActionButton from "@/features/spotify/components/action-button"
-import { editCategoryAction } from "./actions"
+import { addCategoryAction, editCategoryAction } from "./actions"
 
-export function EditCategoryModal({ category }: { category: string }) {
+export function SetCategoryModal({ category }: { category?: string }) {
   const router = useRouter()
   const handleClose = () => router.back()
 
-  const action = editCategoryAction.bind(null, category)
+  const action = category
+    ? editCategoryAction.bind(null, category)
+    : addCategoryAction
 
   const handleSave = async (e) => {
     return action(e).then(() => handleClose())
@@ -30,7 +32,7 @@ export function EditCategoryModal({ category }: { category: string }) {
         <form action={(e) => handleSave(e)} className='flex flex-col'>
           <DialogHeader className='pb-4'>
             <DialogTitle className='text-xl flex items-center gap-2'>
-              Edit Category {category}
+              {category ? "Edit" : "Add"} Category {category}
             </DialogTitle>
           </DialogHeader>
 

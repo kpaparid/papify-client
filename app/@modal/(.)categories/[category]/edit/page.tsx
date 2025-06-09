@@ -1,4 +1,4 @@
-import { EditCategoryModal } from "@/features/categories/edit-category-modal"
+import { SetCategoryModal } from "@/features/categories/set-category-modal"
 import { notFound } from "next/navigation"
 
 export default async function Page({
@@ -10,5 +10,5 @@ export default async function Page({
   console.log("params", p)
   if (!p.category) return notFound()
 
-  return <EditCategoryModal category={p.category} />
+  return <SetCategoryModal category={p.category} />
 }

@@ -1,47 +1,13 @@
-import { fetchSavedTracks } from "@/features/api"
 import Header from "@/components/header"
 import Metrics from "@/components/metrics"
-import List from "../google-drive/list"
-import { TrackData } from "../track-list/components/track-item"
-import { refetchSavedTracks } from "../track-list/actions"
-import { deleteCategoryAction } from "./actions"
+import { fetchSavedTracks, fetchCategories } from "@/features/api"
+import CategoriesList from "./categories-list"
 
 export default async function Categories() {
   const { data: tracks, date } = await fetchSavedTracks()
-
-  const allCategories = tracks[0]?.allCollectionIds || []
-  const tracksByCategory = allCategories.reduce(
-    (acc: { [key: string]: TrackData[] }, category) => {
-      acc[category] = tracks.filter((track) =>
-        track.collectionIds.includes(category)
-      )
-      return acc
-    },
-    {
-      uncategorized: tracks.filter((track) => track.collectionIds.length === 0),
-    }
-  )
-
-  const items = Object.keys(tracksByCategory).map((category) => {
-    const tracks = tracksByCategory[category]
-    return {
-      id: category,
-      image:
-        tracks[Math.floor(Math.random() * tracks.length)]?.spotify.album
-          .images[0],
-      title: category === "uncategorized" ? "Uncategorized" : category,
-      description: `${tracks.length} tracks`,
-      href: `/categories/${category}`,
-      editHref: `/categories/${category}/edit`,
-      editDisabled: category === "uncategorized",
-      deleteDisabled: category === "uncategorized",
-      deleteAction: deleteCategoryAction,
-      meta: {
-        tracksLength: tracks.length,
-        title: category,
-      },
-    }
-  })
+  const categories = await fetchCategories()
+  const allCategoriesLength = categories.length - 2
+  console.log(tracks)
   return (
     <div className='w-full mx-auto max-w-[1320px] space-y-6'>
       <Header
@@ -50,7 +16,7 @@ export default async function Categories() {
       />
       <Metrics
         metrics={[
-          { label: "Total Categories", value: allCategories.length },
+          { label: "Total Categories", value: allCategoriesLength },
           {
             label: "Total Tracks",
             value: tracks.length,
@@ -74,14 +40,7 @@ export default async function Categories() {
           },
         ]}
       />
-      <List
-        title='Your Track Categories'
-        searchPlaceHolder='Search categories...'
-        items={items}
-        sort={[{ field: "title", label: "Name" }]}
-        date={new Date(date).toISOString()}
-        refetch={refetchSavedTracks}
-      />
+      <CategoriesList tracks={tracks} date={date} categories={categories} />
     </div>
   )
 }
